@@ -1,0 +1,70 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#tab-btn-chat')
+    - locator resolved to <button id="tab-btn-chat" class="nav-tab-btn active" onclick="switchView('chat')">…</button>
+  - attempting click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="header-container">…</div> intercepts pointer events
+  - retrying click action
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <button type="button" onclick="openV4Shortcuts()" title="Keyboard shortcuts (?)" class="header-icon-btn btn-icon" aria-label="Show keyboard shortcuts">?</button> from <div class="header-actions">…</div> subtree intercepts pointer events
+  - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div class="header-container">…</div> intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    14 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="header-container">…</div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <button type="button" onclick="openV4Shortcuts()" title="Keyboard shortcuts (?)" class="header-icon-btn btn-icon" aria-label="Show keyboard shortcuts">?</button> from <div class="header-actions">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="header-container">…</div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+       - waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div class="header-container">…</div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+    - waiting for element to be visible, enabled and stable
+    - element is visible, enabled and stable
+    - scrolling into view if needed
+    - done scrolling
+    - <div class="header-container">…</div> intercepts pointer events
+  - retrying click action
+    - waiting 500ms
+
+    at C:\Users\Ishan\OneDrive\Documents\ChatGPT\PROJECT\previews\receipts-sovereign-memory\extracted\receipts-sovereign-memory\tests\e2e\landing-audit\console-audit.mjs:35:44 {
+  name: 'TimeoutError'
+}
+
+Node.js v24.18.0

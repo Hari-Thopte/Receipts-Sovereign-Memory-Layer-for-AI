@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RECEIPTS — Midnight · Cobalt · Lime</title>
+  <meta name="description" content="A local-first memory vault with inspectable sources, confidence decay, corrections and deletion.">
+  <meta property="og:title" content="RECEIPTS — Midnight · Cobalt · Lime">
+  <meta property="og:description" content="Every fact gets a receipt. Every receipt gets old.">
+  <meta property="og:image" content="/static/brand/og-receipts.svg">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#030407">
+  <link rel="stylesheet" href="/static/css/tokens.css?v=midnight-cobalt-lime-v4-p1">
+  <link rel="stylesheet" href="/static/css/thermal.css?v=graph-pause-resume-v7">
+  <link rel="preload" href="/static/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/static/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/static/fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/svg+xml" href="/static/brand/thermal-mark.svg?v=midnight-cobalt-lime-v4">
+  <link rel="apple-touch-icon" href="/static/brand/thermal-mark.svg?v=midnight-cobalt-lime-v4">
+</head>
+<body>
+  <svg class="styleguide-grain" aria-hidden="true" focusable="false">
+      <filter id="thermal-paper-grain" x="0" y="0" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency=".82" numOctaves="2" stitchTiles="stitch" />
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+      <filter id="stamp-ink-worn" x="-12%" y="-18%" width="124%" height="136%">
+        <feTurbulence type="fractalNoise" baseFrequency=".12" numOctaves="2" seed="17" result="stamp-noise" />
+        <feDisplacementMap in="SourceGraphic" in2="stamp-noise" scale=".45" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <mask id="stamp-wear-mask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+        <rect width="1" height="1" fill="white" />
+        <rect width="1" height="1" fill="white" opacity=".18" filter="url(#stamp-ink-worn)" />
+      </mask>
+    </svg>
+
+
+  <div id="marketing-site" hidden></div>
+  <div id="thermal-landing" class="thermal-landing" hidden>
+    <div class="thermal-scroll-progress" aria-hidden="true"><span id="landing-scroll-progress"></span></div>
+    <header class="thermal-letterhead">
+      <a class="thermal-brand" href="#/" aria-label="Receipts home"><img src="/static/brand/thermal-mark.svg" alt="" width="24" height="30"><span>RECEIPTS</span></a>
+      <nav aria-label="Page navigation"><a href="#itemized">Itemized</a><a href="#day-in-vault">Day in the vault</a><a href="#data-ledger">Data ledger</a><a href="#spec-sheet">Spec sheet</a><a href="#notes">Notes</a><a class="landing-external-link" data-landing-link="github" hidden>GitHub</a><a class="landing-external-link" data-landing-link="devpost" hidden>Devpost</a><a class="landing-external-link" data-landing-link="demoVideo" hidden>Demo video</a></nav>
+      <div class="thermal-letterhead-right"><time id="landing-printed-time">PRINTED · TODAY</time><a class="thermal-button thermal-button-primary" href="#/app/chat">Open console</a></div>
+    </header>
+    <main class="thermal-landing-main">
+      <section class="thermal-hero" aria-labelledby="landing-title">
+        <div class="thermal-margin-label"><span>§ 01</span><small>THE QUESTION<br>IS THE RECEIPT</small></div>
+        <div class="thermal-hero-grid">
+          <div class="thermal-hero-copy">
+            <p class="thermal-kicker">PERSONAL MEMORY · LOCAL FIRST</p>
+            <h1 id="landing-title"><span>Your AI remembers.</span><br><em>Receipts proves it.</em></h1>
+            <p class="thermal-deck">Every fact your assistant remembers carries its source, timestamp, confidence and decay clock. Inspect it, correct it, or delete it.</p>
+            <div class="thermal-hero-actions">
+              <a class="thermal-button thermal-button-primary" href="#/app/chat">Open console</a>
+              <a id="landing-demo-link" class="thermal-text-link" href="#" hidden>Watch the demo</a>
+            </div>
+            <section class="thermal-printer" aria-labelledby="printer-heading">
+              <div class="thermal-printer-head"><span id="printer-heading">ASK THE VAULT</span><span class="thermal-status-mark" id="printer-status-label">SAMPLE · OFFLINE</span></div>
+              <form id="landing-printer-form" class="thermal-printer-form">
+                <label class="sr-only" for="landing-printer-input">Your question</label>
+                <div class="thermal-input-row"><input id="landing-printer-input" name="question" maxlength="1000" placeholder="What did I say about sprint meetings?" autocomplete="off"><button class="thermal-button thermal-button-primary" type="submit">Print</button></div>
+              </form>
+              <div class="thermal-suggestions" aria-label="Suggested questions"><button type="button" data-printer-question="How should I plan sprint meetings?">Sprint cadence</button><button type="button" data-printer-question="What are my current priorities?">Current priorities</button><button type="button" data-printer-question="Which memories need review?">Stale memory check</button></div>
+            </section>
+          </div>
+          <div class="thermal-hero-panel" aria-label="Printed receipt preview">
+            <div class="thermal-printer-slot" aria-hidden="true"><span></span></div>
+            <div id="landing-printer-output" class="thermal-printer-output" aria-live="polite"><article id="landing-hero-receipt" class="thermal-printed-slip thermal-hero-receipt"><p class="thermal-empty-slip">Loading the saved receipt…</p></article></div>
+          </div>
+        </div>
+      </section>
+      <section class="thermal-receipt-marquee" aria-label="Saved receipt ticker"><div id="landing-receipt-ticker"><p>Saved receipt summaries are loading.</p></div></section>
+      <section class="thermal-section thermal-itemized" id="itemized"><div class="thermal-margin-label"><span>§ 02</span><small>ITEMIZED</small></div><div class="thermal-section-body"><p class="thermal-kicker">WHAT THE LEDGER KEEPS</p><h2>Memory without receipts<br>is just a rumor.</h2><div class="thermal-itemized-layout"><aside class="thermal-item-tape" aria-label="Capability receipt tape"><strong>ITEMIZED RECEIPT</strong><div id="itemized-tape-lines"></div><b>TOTAL <span id="itemized-tape-total">0</span> ITEMS</b></aside><div class="thermal-ledger-lines">
+        <article class="itemized-row"><h3>Provenance</h3><p>Every record keeps its source, excerpt, timestamp and a SHA-256 hash.</p><a href="#/app/vault">See it in the console</a></article>
+        <article class="itemized-row"><h3>Confidence decay</h3><p>Confidence falls on a per-category half-life until you reaffirm the fact.</p><a href="#/app/vault">See it in the console</a></article>
+        <article class="itemized-row"><h3>Conflicts</h3><p>A scan finds records that contradict each other so you choose what stays.</p><a href="#/app/copilot">See it in the console</a></article>
+        <article class="itemized-row"><h3>Web verification</h3><p>Tavily re-checks web-sourced facts against the live page when you request a verification.</p><a href="#/app/vault">See it in the console</a></article>
+        <article class="itemized-row"><h3>Encrypted sync</h3><p>Export the vault as an AES-256-GCM bundle using PBKDF2 with 100,000 iterations.</p><a href="#/app/chat">See it in the console</a></article>
+        <article class="itemized-row"><h3>Local vault</h3><p>Records live in a local SQLite file; only the context a request needs is sent to the provider.</p><a href="#/app/chat">See it in the console</a></article>
+      </div></div></div></section>
+      <section class="thermal-day-story" id="day-in-vault" aria-labelledby="day-vault-title">
+        <div class="thermal-day-stage">
+          <aside class="day-vault-rail"><p class="thermal-kicker">A READ-ONLY STORY</p><h2 id="day-vault-title">Day in<br>the vault.</h2><strong id="day-counter" aria-live="polite">DAY 00</strong><ol class="day-vault-beats"><li data-day="0">DAY 0 · RECEIVED</li><li data-day="7">DAY 7 · FADING</li><li data-day="14">DAY 14 · CONFLICT</li><li data-day="26">DAY 26 · STALE</li><li data-day="30">DAY 30 · REAFFIRMED</li></ol><label class="day-vault-range-label" for="vault-day-range">Scrub days 0 to 30</label><input id="vault-day-range" type="range" min="0" max="30" value="0" aria-label="Scrub days 0 to 30"><p id="day-vault-caption" class="day-vault-caption">A fact arrives. It gets a receipt.</p></aside>
+          <div id="vault-day-scrub" class="day-vault-receipts" aria-live="polite"><p>Loading the sample receipts…</p></div>
+        </div>
+        <p class="day-vault-disclaimer">Illustrative timeline using a 14-day half-life. Not your data.</p>
+      </section>
+      <section class="thermal-section thermal-data-section" id="data-ledger"><div class="thermal-margin-label"><span>§ 03</span><small>DATA LEDGER</small></div><div class="thermal-section-body"><p class="thermal-kicker">NOTHING LEAVES WITHOUT A LINE IN THE LEDGER</p><h2>Where your data goes.</h2><p class="thermal-section-intro">Saved records stay in the local SQLite vault. When you ask a question, selected context can be sent to Nebius Token Factory. Tavily receives searches and source URLs when you request web verification.</p><div class="thermal-data-columns"><div><h3>Stays on this machine</h3><ul><li>Saved memories and their history</li><li>SQLite vault and local settings</li><li>Outbound request records</li></ul></div><div><h3>Sent to Nebius Token Factory</h3><ul><li>Selected memory context needed to answer</li><li>For web verification, search terms and source URLs are sent to Tavily</li></ul></div></div><div class="thermal-outbound"><div class="thermal-outbound-head"><span>OUTBOUND REQUEST LEDGER</span><span id="landing-outbound-source">READING</span><button type="button" id="landing-open-outbound">Open ledger</button></div><div id="landing-outbound-preview"><p>Reading recorded requests…</p></div></div></div></section>
+      <section class="thermal-section thermal-spec-section" id="spec-sheet"><div class="thermal-margin-label"><span>§ 03A</span><small>SPEC SHEET</small></div><div class="thermal-section-body"><p class="thermal-kicker">BUILD FACTS · READ FROM THIS APP</p><h2>What runs this counter.</h2><div id="receipts-spec-sheet" class="receipts-spec-sheet"><p>Reading current engine configuration…</p></div><a href="#/privacy-and-licence">Privacy &amp; licence notes ↗</a></div></section><section class="thermal-section thermal-cta-section"><div class="thermal-margin-label"><span>§ 04</span><small>KEEP THE STUB</small></div><div class="thermal-coupon"><div><p class="thermal-kicker">YOUR MEMORY IS YOURS TO INSPECT</p><h2>Forget on purpose.</h2><p>Open console to inspect what is saved, correct a fact, or remove it from the vault.</p></div><a class="thermal-button thermal-button-primary" href="#/app/chat">Open console</a></div></section>
+      <section class="thermal-section thermal-notes" id="notes"><div class="thermal-margin-label"><span>§ 05</span><small>FOOTNOTES</small></div><div class="thermal-section-body"><p class="thermal-kicker">SMALL PRINT</p><h2>Notes from the counter.</h2><div class="thermal-footnotes"><p><b>01 · Where is my data?</b><br>Saved records use the local SQLite database on this machine.</p><p><b>02 · What leaves this machine?</b><br>Only selected request context and requested web-search material is sent to configured providers.</p><p><b>03 · How does decay work?</b><br>Confidence is a freshness and review signal, not a truth score.</p><p><b>04 · Can I delete a memory?</b><br>Yes. The Vault provides a Forget action for saved records.</p><p><b>05 · Does confidence prove a fact?</b><br>No. It is a review signal, not a measure of truth.</p><p><b>06 · Can I inspect provider requests?</b><br>Open the outbound ledger to review request records available in this local demo.</p></div></div></section>
+      <section class="thermal-demo-video" id="demo-video" hidden aria-label="Demo video"></section>
+    </main>
+    <footer class="thermal-receipt-footer"><div class="thermal-footer-inner"><img src="/static/brand/thermal-mark.svg" alt="" width="24" height="30"><span>THANK YOU. COME BACK AND VERIFY.</span><div id="landing-footer-barcode" aria-hidden="true"></div><p>Built for the Nebius x NVIDIA Global AI Hackathon.<br>NVIDIA, Nemotron and Nebius are trademarks of their respective owners.</p><nav><a href="#/app/chat">Console</a><a href="#/app/vault">Vault</a><a href="/LICENSE" target="_blank" rel="noopener noreferrer">MIT licence</a><span class="keyboard-hint">Press ? for shortcuts</span></nav></div></footer>
+  </div>
+
+  <main id="thermal-not-found" class="thermal-not-found" hidden>
+    <p>§ 404 · PRINTER STATUS</p>
+    <h1>Paper jam.</h1>
+    <p>That page is not in this ledger.</p>
+    <a href="#/">Return to the counter ↗</a>
+  </main>
+
+  <main id="styleguide-site" class="styleguide-site" hidden>
+
+    <div class="styleguide-shell">
+      <header class="styleguide-letterhead">
+        <a class="styleguide-brand" href="#/" aria-label="Receipts home"><span class="styleguide-logo" aria-hidden="true">R</span><span>Receipts · Midnight / Cobalt / Lime</span></a>
+        <span>Component docket </span>
+        <a class="styleguide-back" href="#/">Return to the letterhead →</a>
+      </header>
+      <section class="styleguide-title">
+        <div class="styleguide-section-mark">§ 00<br>TYPE &amp; STOCK</div>
+        <div><h1>The reveal is the interface.</h1><p>A working component sheet for the Midnight · Cobalt · Lime. The receipt below is rendered from the first saved vault record; its state and barcode come from that record.</p></div>
+      </section>
+      <section class="styleguide-section">
+        <div class="styleguide-section-mark">§ 01<br>INKS</div>
+        <h2>Midnight, cobalt, lime</h2>
+        <div class="styleguide-content styleguide-token-list">
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--black)"></i><span>black · base</span></div>
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--black-2)"></i><span>black-2 · surface</span></div>
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--black-3)"></i><span>black-3 · raised</span></div>
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--paper)"></i><span>paper · receipt stock</span></div>
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--text)"></i><span>text · foreground</span></div>
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--cobalt)"></i><span>cobalt · structure</span></div>
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--cobalt-soft)"></i><span>cobalt-soft · small text</span></div>
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--lime)"></i><span>lime · active</span></div>
+  <div class="styleguide-token"><i class="styleguide-swatch" style="--swatch:var(--danger)"></i><span>danger · destructive</span></div>
+</div></section>
+      <section class="styleguide-section">
+        <div class="styleguide-section-mark">§ 02<br>TYPE</div>
+        <h2>Bricolage, Instrument Sans, IBM Plex Mono.</h2>
+        <div class="styleguide-content styleguide-type-sample">
+          <div class="styleguide-type-display">Your AI remembers.<br><em>Receipts proves it.</em></div>
+          <div class="styleguide-type-ui">Instrument Sans · The source stays beside the remembered fact.</div>
+          <div class="styleguide-type-mono">IBM PLEX MONO · REC-ASYNC1 · 091% · 00:01.4</div>
+        </div>
+      </section>
+      <section class="styleguide-section">
+        <div class="styleguide-section-mark">§ 03<br>STAMP PAD</div>
+        <h2>States are printed, not colored alone.</h2>
+        <div class="styleguide-content styleguide-stamps" aria-label="Receipt status stamps">
+          <span class="thermal-stamp">Fresh</span><span class="thermal-stamp is-fading">Fading</span><span class="thermal-stamp is-stale">Stale</span>
+          <span class="thermal-stamp is-superseded">Superseded</span><span class="thermal-stamp is-verified">Verified</span><span class="thermal-stamp is-forgotten">Forgotten</span><span class="thermal-stamp is-quarantined">Quarantined</span>
+        </div>
+      </section>
+      <section class="styleguide-section">
+        <div class="styleguide-section-mark">§ 04<br>CONTROLS</div>
+        <h2>Buttons, double ink focus, and disabled state.</h2>
+        <div class="styleguide-content styleguide-buttons">
+          <button class="thermal-button thermal-button-primary" type="button">Print</button>
+          <button class="thermal-button" type="button">Inspect</button>
+          <button class="thermal-button thermal-button-link" type="button">Open ledger →</button>
+          <button class="thermal-button thermal-button-danger" type="button">Forget</button>
+          <button class="thermal-button" type="button" disabled>Unavailable</button>
+        </div>
+      </section>
+      <section class="styleguide-section">
+        <div class="styleguide-section-mark">§ 05<br>SPECIMEN</div>
+        <h2>Receipt card · real saved record</h2>
+        <div id="styleguide-receipt" class="styleguide-content styleguide-receipt-wrap thermal-specimen" aria-live="polite"><p class="styleguide-note">Warming the printer…</p></div>
+      </section>
+      <section class="styleguide-section">
+        <div class="styleguide-section-mark">§ 06<br>LEDGER ROW</div>
+        <h2>Dotted leaders keep the columns aligned.</h2>
+        <div id="styleguide-ledger-row" class="styleguide-content styleguide-ledger-row"><span>REC-—</span><span class="leader">Waiting for the saved record ·········</span><span>—%</span><span>—</span></div>
+      </section>
+            <section class="styleguide-section">
+        <div class="styleguide-section-mark">§ 07<br>REVEAL</div>
+        <h2>Hidden provenance on a black surface.</h2>
+        <div class="styleguide-content"><button id="styleguide-reveal" class="thermal-reveal-specimen" type="button" data-cursor="VERIFY"><span>Warming the printer…</span><span>Focus or hover to reveal the source line</span><b>VERIFY</b></button></div>
+      </section><section class="styleguide-section">
+        <div class="styleguide-section-mark">§ 08<br>PRINTER</div>
+        <h2>Metadata belongs at the foot.</h2>
+        <div class="styleguide-content styleguide-printer-footer"><span>CONFIGURED MODEL · see Diagnostics</span><span>INPUT — · OUTPUT —</span><span>LATENCY —</span></div>
+      </section>
+      <p class="styleguide-note">Bricolage Grotesque, Instrument Sans and IBM Plex Mono are self-hosted under static/fonts/ with their OFL notices.</p>
+    </div>
+  </main>
+
+  <!-- Top Navigation Header -->
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      
+      <!-- Left: Clean Brand Logo -->
+      <a href="#/" class="brand" aria-label="Return to landing page">
+        <img class="brand-icon" src="/static/brand/thermal-mark.svg?v=midnight-cobalt-lime-v4" alt="" width="36" height="36">
+        <div class="brand-title">
+          RECEIPTS
+        </div>
+      </a>
+
+      <a class="console-home-link" href="#/">← Home</a>
+
+      <!-- Center: Main Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button id="tab-btn-chat" class="nav-tab-btn active" onclick="switchView('chat')">
+          <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#chat"></use></svg>
+          <span>Chat</span>
+        </button>
+        <button id="tab-btn-vault" class="nav-tab-btn" onclick="switchView('vault')">
+          <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#vault"></use></svg>
+          <span>Vault</span>
+          <span id="nav-vault-badge" class="nav-badge">6</span>
+        </button>
+        <button id="tab-btn-graph" class="nav-tab-btn" onclick="switchView('graph')">
+          <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#graph"></use></svg>
+          <span>Graph</span>
+        </button>
+        <button id="tab-btn-agent" class="nav-tab-btn" onclick="switchView('agent')">
+          <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#robot"></use></svg>
+          <span>Copilot</span>
+          <span id="agent-alerts-badge" class="badge-alert" style="display:none">0</span>
+        </button>
+        <button id="tab-btn-tour" class="nav-tab-btn" onclick="switchView('tour')">
+          <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#book"></use></svg>
+          <span>Tour</span>
+        </button>
+      </nav>
+
+      <!-- Right: Sleek System & Profile Controls -->
+      <div class="header-actions">
+        <span id="demo-mode-label" class="demo-mode-label" hidden>DEMO</span>
+        <div class="staleness-control">
+          <button id="staleness-chip" class="staleness-chip" type="button" style="display:none" aria-expanded="false" aria-controls="staleness-popover" onclick="toggleStalenessPopover()"></button>
+          <div id="staleness-popover" class="staleness-popover" role="region" aria-label="Memory review alerts" hidden>
+            <p id="staleness-popover-text"></p>
+            <ul class="staleness-popover-list" aria-label="Receipts needing review"></ul>
+            <button class="btn-sm btn-secondary" type="button" onclick="switchView('agent'); toggleStalenessPopover(false)">Review in Copilot</button>
+          </div>
+        </div>
+        <!-- Live Engine Status Pill -->
+        <button id="engine-pill" class="engine-pill" onclick="openEngineModal()" title="Local fallback: no live Nebius call yet">
+          <span class="dot dot-amber" id="engine-status-dot"></span>
+          <span id="model-display-pill" class="engine-status-text">OFFLINE</span>
+        </button>
+
+        <!-- User Profile -->
+        <div class="profile-menu-wrap">
+          <button id="profile-menu-trigger" class="profile-menu-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu" onclick="toggleProfileMenu()" title="Open profile menu">
+            <span class="profile-avatar" aria-hidden="true">H</span><span id="current-user-label" class="profile-name">Hari</span><svg class="ui-icon profile-chevron" aria-hidden="true"><use href="/static/brand/icons.svg#chevron"></use></svg>
+          </button>
+          <div id="profile-menu" class="profile-menu" role="menu" hidden>
+            <span class="profile-menu-label">SWITCH PROFILE</span>
+            <button type="button" role="menuitemradio" aria-checked="true" onclick="switchUserProfile('Hari (Primary)'); closeProfileMenu()">Hari · Primary</button>
+            <button type="button" role="menuitemradio" aria-checked="false" onclick="switchUserProfile('Work Laptop'); closeProfileMenu()">Work Laptop</button>
+            <button type="button" role="menuitem" onclick="closeProfileMenu(); openSyncModal('profile')">Manage profiles</button>
+            <button type="button" role="menuitem" onclick="closeProfileMenu(); openSyncModal('export')">Open Sync</button>
+            <button type="button" role="menuitem" onclick="closeProfileMenu(); openSettingsModal()">Open Settings</button>
+          </div>
+        </div>
+
+        <!-- Encrypted Sync -->
+        <button class="header-icon-btn btn-icon" onclick="openSyncModal('export')" title="Encrypted vault sync" aria-label="Encrypted vault sync">
+          <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#lock"></use></svg>
+        </button>
+
+        <!-- Settings -->
+        <button class="header-icon-btn btn-icon" data-dev-only="true" onclick="openSettingsModal()" title="Settings & API Keys" aria-label="Settings and API keys">
+          <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#settings"></use></svg>
+        </button>
+        <button class="header-icon-btn btn-icon" type="button" onclick="openV4Shortcuts()" title="Keyboard shortcuts (?)" aria-label="Show keyboard shortcuts">?</button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- VIEW 1: CHAT ASSISTANT -->
+    <section id="view-chat" class="view-section active">
+      <header class="console-page-heading"><span>§ 01 · CHAT</span><h1>Ask, then <em>verify.</em></h1><p>Ask what the vault remembers. Read the source behind each answer.</p></header>
+      <div class="chat-layout">
+        
+        <!-- Chat Panel -->
+        <div class="chat-panel">
+          <div class="chat-header">
+            <div class="chat-header-title">
+              <span>Sovereign Assistant</span>
+              <span class="model-badge" id="chat-model-badge">Nebius / NVIDIA Nemotron</span>
+            </div>
+            <div class="chat-header-tools">
+              <label style="display:flex; align-items:center; gap:0.3rem; cursor:pointer">
+                <input type="checkbox" id="check-include-stale"> Include stale memories
+              </label>
+              <button class="btn-secondary" type="button" onclick="openOutboundLedger()">Data sent</button>
+              <button id="compare-mode-button" class="btn-secondary compare-mode-button" type="button" hidden disabled aria-disabled="true">Compare</button>
+            </div>
+          </div>
+
+          <div id="chat-messages" class="chat-messages" aria-live="polite" aria-relevant="additions text">
+            <!-- Initial welcome message -->
+            <div class="chat-msg assistant welcome-message">
+              <span class="msg-avatar" aria-hidden="true">R</span>
+              <div class="msg-bubble">
+                Hello Hari. I am <strong>Receipts</strong>, your sovereign memory layer. Ask a question to see the answer and the receipts behind it.
+              </div>
+              <div class="msg-meta">
+                <span>Receipts Engine</span> • <span>Local First</span>
+              </div>
+            </div>
+            <div class="chat-empty-hero" id="chat-empty-hero">
+              <div class="hero-eyebrow">YOUR MEMORY, WITH RECEIPTS</div>
+              <h2>What would you like to remember?</h2>
+              <p>Start with a question. You can inspect the source behind every cited memory.</p>
+              <div class="suggestion-grid">
+                <button type="button" class="suggestion-card" onclick="applyQuickPrompt('How should we schedule the sprint planning meeting?')"><span class="suggestion-icon">01</span><strong>Sprint cadence</strong><span>Find the preferred meeting rhythm</span></button>
+                <button type="button" class="suggestion-card" onclick="applyQuickPrompt('What is my current engineering focus this sprint?')"><span class="suggestion-icon">02</span><strong>Current priorities</strong><span>Recall active engineering work</span></button>
+                <button type="button" class="suggestion-card" onclick="applyQuickPrompt('What model powers your inference on Nebius?')"><span class="suggestion-icon">03</span><strong>Model stack</strong><span>Inspect saved provider details</span></button>
+                <button type="button" class="suggestion-card" onclick="applyQuickPrompt('What is my current travel phone number?')"><span class="suggestion-icon">04</span><strong>Stale memory check</strong><span>Review a detail that may need updating</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Input Bar -->
+          <div class="chat-input-bar">
+            <form id="chat-form" class="input-row" onsubmit="handleChatSubmit(event)">
+              <input type="text" id="chat-input" class="chat-input" placeholder="Ask a question or query your personal vault..." autocomplete="off">
+              <button type="submit" id="btn-chat-send" class="btn-send" aria-label="Send message" title="Send message">
+                <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#send"></use></svg>
+                <span id="send-spinner" class="spinner" style="display:none"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Chat Side Inspector: Used Receipts Drawer -->
+        <aside class="chat-inspector-panel">
+          <div class="inspector-header">
+            <div class="inspector-header-title">
+              <span>Active Receipt Inspector</span>
+            </div>
+            <span id="inspector-count-badge" class="brand-badge">0 Receipts</span>
+          </div>
+
+          <div id="inspector-body" class="inspector-body">
+            <div class="empty-inspector">
+              <div style="font-size:1.1rem; color:var(--thermal-ink-2); font-weight:600">No Receipt Selected</div>
+              <div><strong>No receipts active</strong></div>
+              <div>Ask a question in chat or click a receipt citation pill to audit its source provenance and freshness score.</div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- VIEW 2: MEMORY VAULT -->
+    <section id="view-vault" class="view-section">
+      <header class="console-page-heading"><span>§ 02 · VAULT</span><h1>Every fact. Its source. Its clock.</h1><p>Open a record to inspect provenance, confidence and review history.</p></header>
+      <div class="vault-header-row">
+        <div class="vault-title-group">
+          <div class="vault-subtitle">
+            All memories live exclusively in your local SQLite database (<code id="vault-db-path-label">./data/vault.db</code>). Nebius and NVIDIA Nemotron only see minimal context on-demand.
+          </div>
+        </div>
+
+        <div class="vault-toolbar">
+          <button class="btn-primary" onclick="openAddMemoryModal()"><span>+ Add Memory Receipt</span></button>
+          <div class="vault-actions-wrap">
+            <button class="btn-secondary" type="button" aria-expanded="false" aria-controls="vault-actions-menu" onclick="toggleVaultActions()">Actions <span aria-hidden="true">⌄</span></button>
+            <div id="vault-actions-menu" class="vault-actions-menu" role="menu" hidden>
+              <button type="button" role="menuitem" onclick="closeVaultActions(); checkAllVaultConflicts()">Scan Conflicts</button>
+              <button type="button" role="menuitem" onclick="closeVaultActions(); openTavilyIngestModal()">Ingest Web</button>
+              <button type="button" role="menuitem" onclick="closeVaultActions(); openSyncModal('export')">Encrypted Sync</button>
+              <button type="button" role="menuitem" onclick="closeVaultActions(); verifyVaultIntegrity()">Verify vault integrity</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="vault-stats-subbar" aria-label="Vault health and receipt counts">
+        <div class="vault-health-tile">
+          <div class="health-ring" id="vault-health-ring" role="img" aria-label="Vault health 100 percent">
+            <div class="health-ring-center"><strong id="stat-health-pct">100%</strong><span>HEALTH</span></div>
+          </div>
+          <div><span class="vault-stat-label">Sovereign health</span><span class="vault-stat-note">Freshness weighted</span></div>
+        </div>
+        <div class="vault-stat-tile"><span class="vault-stat-label">Total receipts</span><strong id="stat-total-count">0</strong><span class="vault-stat-note">Stored locally</span></div>
+        <div class="vault-stat-tile stat-fresh"><span class="vault-stat-label">Fresh</span><strong id="stat-fresh-count">0</strong><span class="vault-stat-note">Recently confirmed</span></div>
+        <div class="vault-stat-tile stat-decaying"><span class="vault-stat-label">Decaying</span><strong id="stat-decay-count">0</strong><span class="vault-stat-note">Review when useful</span></div>
+        <div class="vault-stat-tile stat-stale"><span class="vault-stat-label">Stale</span><strong id="stat-stale-count">0</strong><span class="vault-stat-note">Needs confirmation</span></div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="vault-filters">
+        <div class="filter-group">
+          <span style="font-size:0.75rem; color:var(--thermal-ink-2); font-weight:600">CATEGORY:</span>
+          <button class="filter-pill active" onclick="filterVault('all', currentStatus)">All</button>
+          <button class="filter-pill" onclick="filterVault('preference', currentStatus)">Preferences</button>
+          <button class="filter-pill" onclick="filterVault('project', currentStatus)">Projects</button>
+          <button class="filter-pill" onclick="filterVault('factual_web', currentStatus)">Web Research</button>
+          <button class="filter-pill" onclick="filterVault('personal', currentStatus)">Personal</button>
+        </div>
+
+        <div class="filter-group">
+          <span style="font-size:0.75rem; color:var(--thermal-ink-2); font-weight:600">STATUS:</span>
+          <button class="filter-pill active" onclick="filterVault(currentCategory, 'all')">All</button>
+          <button class="filter-pill" onclick="filterVault(currentCategory, 'fresh')">Fresh</button>
+          <button class="filter-pill" onclick="filterVault(currentCategory, 'decaying')">Decaying</button>
+          <button class="filter-pill" onclick="filterVault(currentCategory, 'stale')">Stale</button>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon"><svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#search"></use></svg></span>
+          <input type="text" id="vault-search-input" placeholder="Search facts, sources, excerpts..." oninput="handleVaultSearch(event)">
+        </div>
+      </div>
+
+      <!-- Conflict Notice Box (if any detected) -->
+      <div id="vault-conflict-banner" class="conflict-alert-card" style="display:none">
+        <div class="conflict-banner-header">
+          <span><svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#alert"></use></svg> Contradictory Memories Detected in Vault</span>
+          <button class="btn-sm btn-secondary" onclick="dismissConflictBanner()">Dismiss</button>
+        </div>
+        <div id="vault-conflict-list" class="conflict-items"></div>
+      </div>
+
+      <!-- Cards Grid -->
+      <div id="vault-grid" class="vault-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- VIEW 3: LONG-TERM MEMORY GRAPH -->
+    <section id="view-graph" class="view-section">
+      <header class="console-page-heading"><span>§ 03 · GRAPH</span><h1>Relationships have <em>receipts.</em></h1><p>Explore relationships derived from saved receipts.</p></header>
+      <div class="graph-layout graph-workspace">
+        <div class="graph-canvas-container">
+          <div class="graph-toolbar">
+            <label class="graph-search"><span class="sr-only">Find a fact</span><input id="graph-search" type="search" placeholder="Find a fact…" oninput="filterGraphNodes(this.value)"></label>
+            <div class="graph-toolbar-actions" aria-label="Graph controls">
+              <button type="button" class="graph-icon-button" data-graph-icon="zoom-in" aria-label="Zoom in" title="Zoom in" onclick="zoomGraph(1.2)"></button>
+              <button type="button" class="graph-icon-button" data-graph-icon="zoom-out" aria-label="Zoom out" title="Zoom out" onclick="zoomGraph(.83)"></button>
+              <button type="button" class="graph-icon-button" data-graph-icon="fit" aria-label="Fit to view" title="Fit to view" onclick="resetGraphView()"></button>
+              <button type="button" class="graph-icon-button" data-graph-icon="refresh" aria-label="Refresh" title="Refresh" onclick="reloadMemoryGraph()"></button>
+              <button type="button" id="graph-label-toggle" data-graph-icon="tag" class="graph-icon-button" aria-pressed="true" aria-label="Hide labels" title="Hide labels" onclick="toggleGraphLabels()"></button>
+              <button type="button" id="graph-physics-toggle" data-graph-icon="pause" class="graph-icon-button" aria-pressed="true" aria-label="Pause layout" title="Pause layout" onclick="toggleGraphPhysics()"></button>
+            </div>
+            <div class="graph-mode-toggle" role="group" aria-label="Graph display mode"><button type="button" class="is-active" aria-pressed="true" onclick="setGraphMode('graph',this)">Graph</button><button type="button" aria-pressed="false" onclick="setGraphMode('list',this)">List</button></div>
+          </div>
+          <div id="graph-legend" class="graph-legend" aria-label="Graph legend"></div>
+          <div id="graph-link-status" class="graph-link-status" hidden>No links found yet. <button type="button" onclick="checkAllVaultConflicts()">Run Scan Conflicts</button></div>
+          <div id="graph-wrapper" class="graph-svg-wrapper">
+            <svg id="memory-graph-svg" class="memory-graph-svg" role="group" aria-label="Interactive memory graph"></svg>
+            <div id="graph-list-view" class="graph-list-view" hidden></div>
+            <div id="graph-empty-state" class="graph-empty" hidden><span class="graph-state-icon">⌁</span><strong id="graph-state-title">Loading receipts…</strong><span id="graph-state-copy">The graph uses relationships returned by the API.</span><button type="button" class="btn-sm btn-secondary" onclick="reloadMemoryGraph()">Try again</button></div>
+            <aside id="graph-node-details" class="graph-inspector-panel" aria-label="Receipt details" hidden><button type="button" class="graph-drawer-close" aria-label="Close receipt details" onclick="closeGraphDetails()">×</button><div class="inspector-body"><div class="empty-inspector">Select a receipt to inspect its details.</div></div></aside>
+          </div>
+          <div class="graph-timeline"><label for="graph-day-range">Illustrative decay preview <span id="graph-day-label">DAY 00</span></label><input id="graph-day-range" type="range" min="0" max="30" value="0" aria-label="Illustrative decay preview, days 0 to 30" oninput="setGraphDay(this.value)"><span>Not your data · uses saved half-life categories</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: AGENTIC COPILOT & HEALTH TOOLS -->
+    <section id="view-agent" class="view-section">
+      <header class="console-page-heading"><span>§ 04 · COPILOT</span><h1>The audit <em>desk.</em></h1><p>Review stale and conflicting records with their evidence in view.</p></header>
+      <div class="agent-dashboard">
+        
+        <!-- Health Meter & Stats Row -->
+        <div class="agent-health-row">
+          <div class="health-card">
+            <div class="health-gauge-box">
+              <div class="health-circle-outer">
+                <div class="health-circle-inner">
+                  <span id="agent-health-value" class="health-big-pct">100%</span>
+                  <span class="health-sub">Health Score</span>
+                </div>
+              </div>
+            </div>
+            <div class="health-info">
+              <h3>Sovereign Vault Health</h3>
+              <p style="color:var(--thermal-ink-2); font-size:0.88rem; margin:0.4rem 0 1rem 0">
+                Calculated in real-time by weighting active fresh facts against decaying and stale memories.
+              </p>
+              <div class="health-breakdown">
+                <div class="breakdown-item">
+                  <span class="dot dot-green"></span>
+                  <span>Fresh: <strong id="agent-fresh-stat">0</strong></span>
+                </div>
+                <div class="breakdown-item">
+                  <span class="dot dot-amber"></span>
+                  <span>Decaying: <strong id="agent-decay-stat">0</strong></span>
+                </div>
+                <div class="breakdown-item">
+                  <span class="dot dot-red"></span>
+                  <span>Stale: <strong id="agent-stale-stat">0</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="agent-model-card">
+            <div style="font-size:0.75rem; color:var(--thermal-carbon-blue); font-weight:700; letter-spacing:0.05em">SUGGESTION ENGINE</div>
+            <h4 style="margin:0.4rem 0" id="agent-engine-name">Configured provider or local rules</h4>
+            <p style="font-size:0.84rem; color:var(--thermal-ink-2); line-height:1.4">
+              Recommendations use the configured model when available and local rules as a fallback. Each result shows its generating source.
+            </p>
+            <div style="margin-top:1rem">
+              <button class="btn-primary" onclick="fetchAgentSuggestions()" id="btn-refresh-agent-sug">
+                <span>Refresh recommendations</span>
+                <span id="agent-spinner" class="spinner" style="display:none"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Proactive Staleness Alerts Section -->
+        <div class="agent-section-block">
+          <div class="section-title-row">
+            <h3><svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#alert"></use></svg> Proactive Staleness Alerts</h3>
+            <span class="badge-sub">Auto-flagged by exponential decay curves</span>
+          </div>
+          <p class="copilot-key-hint">Focus an alert card, then press <kbd>R</kbd> Reaffirm, <kbd>C</kbd> Correct, or <kbd>F</kbd> Forget. Forget asks you to confirm.</p>
+          <div id="agent-staleness-list" class="agent-alerts-grid">
+            <!-- Dynamic alerts -->
+          </div>
+        </div>
+
+        <!-- Agentic Maintenance Suggestions Section -->
+        <div class="agent-section-block">
+          <div class="section-title-row">
+            <h3><svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#robot"></use></svg> Maintenance Recommendations</h3>
+            <span class="badge-sub" id="agent-suggestions-meta">Suggestion source: waiting for analysis</span>
+          </div>
+          <div id="agent-suggestions-list" class="agent-suggestions-grid">
+            <!-- Dynamic suggestions -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 5: SOVEREIGNTY DEMO TOUR -->
+    <section id="view-tour" class="view-section">
+      <header class="console-page-heading"><span>§ 05 · TOUR</span><h1>Inspect the system.</h1><p>Walk through the current receipt, vault, graph and provider checks.</p></header>
+      <div class="tour-container">
+        
+        <div class="tour-intro">
+          <p class="tour-kicker">SOVEREIGNTY WALKTHROUGH</p>
+          <p>Run an inspection step to open the related receipt or tool. Provider checks show when an API key is needed.</p>
+          <nav class="tour-progress-rail" aria-label="Tour progress">
+            <button type="button" data-tour-jump="1">01 Capture</button><button type="button" data-tour-jump="2">02 Inspect</button><button type="button" data-tour-jump="3">03 Correct</button><button type="button" data-tour-jump="4">04 Recheck</button><button type="button" data-tour-jump="5">05 Verify</button><button type="button" data-tour-jump="6">06 Export</button>
+          </nav>
+          <button class="btn-primary tour-run-all" type="button" onclick="runAllTourChecks()">Run all</button>
+          <p class="tour-disclosure">Checks navigate the existing local demo. Nothing is saved until you confirm an edit or export.</p>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 1 • PROVENANCE REASONING</div>
+          <h3 class="tour-title">1. Query Assistant on Sprint Planning</h3>
+          <p class="tour-desc">
+            Ask how sprint meetings should be scheduled. The current response may use live Nebius inference or the clearly labelled local fallback.
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Prompt:</strong> "How should we schedule the sprint planning meeting?"
+            </div>
+            <button class="btn-primary" onclick="runTourStep(1)">Run check</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 2 • AUDIT RECEIPT CARD</div>
+          <h3 class="tour-title">2. Inspect the Receipt Card</h3>
+          <p class="tour-desc">
+            Examine the receipt for <code>REC-ASYNC1</code>, including its stored email excerpt, displayed confidence, and configured half-life.
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Receipt:</strong> <code>REC-ASYNC1</code> • Email Thread: Q4 Sprint Cadence
+            </div>
+            <button class="btn-secondary" onclick="runTourStep(2)">Run check</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 3 • SOVEREIGN USER CORRECTION & CONFLICT CHECK</div>
+          <h3 class="tour-title">3. Live Correct the Memory</h3>
+          <p class="tour-desc">
+            Change your preference from async to: <em>"User now prefers live 15-minute morning syncs over async communication."</em> Watch the audit trail capture your edit with timestamps.
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Correction:</strong> Update preference & reset confidence clock.
+            </div>
+            <button class="btn-primary" onclick="runTourStep(3)">Run check</button>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 4 • VERIFY SYSTEM REFLECTS CHANGE</div>
+          <h3 class="tour-title">4. Re-Query Assistant</h3>
+          <p class="tour-desc">
+            Ask the same question again and inspect the result. The response depends on provider availability and the selected receipt context.
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Re-test:</strong> Assistant answers with updated fact and cited receipt.
+            </div>
+            <button class="btn-primary" onclick="runTourStep(4)">Run check</button>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 5 • TAVILY SOURCE VERIFICATION</div>
+          <h3 class="tour-title">5. Verify Web Source via Tavily</h3>
+          <p class="tour-desc">
+            Run a live verification on <code>REC-NEMO3</code>. Tavily checks the live URL to confirm the excerpt is intact and flags if content drift has occurred.
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Target:</strong> <code>REC-NEMO3</code> (Nebius Token Factory Model Directory)
+            </div>
+            <button class="btn-secondary" onclick="runTourStep(5)">Run check</button>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 6 • ENCRYPTED CROSS-DEVICE SYNC</div>
+          <h3 class="tour-title">6. Export AES-256-GCM Encrypted Vault</h3>
+          <p class="tour-desc">
+            Export a copy of the local vault encrypted with a passphrase using AES-256-GCM and PBKDF2 (100,000 iterations).
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Action:</strong> Open Encrypted Sync modal to export or import.
+            </div>
+            <button class="btn-primary" onclick="runTourStep(6)">Run check</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: CONFLICT DETECTION WARNING ("WOW" INTERACTION) -->
+  <div id="modal-conflict" class="modal-overlay">
+    <div class="modal-content modal-warning">
+      <div class="modal-header">
+        <div class="modal-title" style="color:var(--thermal-ink-2)">
+          <span><svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#alert"></use></svg> Memory Conflict Detected</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-conflict')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.9rem; color:var(--thermal-ink); line-height:1.5">
+          The statement you are adding directly contradicts an active receipt already stored in your sovereign vault:
+        </p>
+
+        <div class="conflict-comparison">
+          <div class="conflict-col old">
+            <span class="col-tag">EXISTING ACTIVE RECEIPT (<span id="conflict-existing-id">#REC</span>)</span>
+            <div id="conflict-existing-content" class="conflict-text"></div>
+          </div>
+          <div class="conflict-col new">
+            <span class="col-tag">PROPOSED NEW FACT</span>
+            <div id="conflict-proposed-content" class="conflict-text"></div>
+          </div>
+        </div>
+
+        <div id="conflict-domain-hint" class="conflict-hint-box"></div>
+
+        <p style="font-size:0.8rem; color:var(--thermal-ink-2)">
+          How would you like Receipts to resolve this contradiction?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-conflict')">Cancel & Edit</button>
+        <button class="btn-secondary" onclick="resolveConflictKeepBoth()">Keep Both as Context</button>
+        <button class="btn-primary" onclick="resolveConflictOverwrite()">
+          <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#zap"></use></svg><span>Overwrite & Supersede Existing</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ENCRYPTED CROSS-DEVICE SYNC -->
+  <div id="modal-sync" class="modal-overlay">
+    <div class="modal-content" style="max-width:640px">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span><svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#lock"></use></svg> Encrypted Sync (AES-256-GCM)</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-sync')">&times;</button>
+      </div>
+
+      <!-- Sync Tabs -->
+      <div class="sync-tab-bar">
+        <button id="sync-tab-export" class="sync-tab-btn active" onclick="switchSyncTab('export')">Export Vault</button>
+        <button id="sync-tab-import" class="sync-tab-btn" onclick="switchSyncTab('import')">Import Vault</button>
+        <button id="sync-tab-profile" class="sync-tab-btn" onclick="switchSyncTab('profile')">User Profiles</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- SUB-TAB 1: EXPORT -->
+        <div id="sync-panel-export" class="sync-panel active">
+          <p style="font-size:0.84rem; color:var(--thermal-ink-2); margin-bottom:1rem">
+            Create an encrypted export using <strong>AES-256-GCM</strong> with 100,000 PBKDF2 iterations. The exported file remains your responsibility to store and transfer.
+          </p>
+          <div class="form-group">
+            <label class="form-label">CURRENT PROFILE / USER ID</label>
+            <input type="text" id="sync-export-user" class="form-input" value="Hari (Primary)" readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ENCRYPTION PASSPHRASE</label>
+            <input type="password" id="sync-export-pass" class="form-input" placeholder="Enter a passphrase (min 4 characters)">
+          </div>
+          <div style="display:flex; gap:0.5rem; align-items:center; margin-top:0.25rem">
+            <input type="checkbox" id="sync-export-audit" checked>
+            <label for="sync-export-audit" style="font-size:0.8rem; color:var(--thermal-ink-2); cursor:pointer">Include full provenance audit histories</label>
+          </div>
+
+          <div style="margin-top:1rem; display:flex; gap:0.75rem">
+            <button class="btn-primary" onclick="performSyncExport()">
+              <span id="export-btn-label">Generate Encrypted Bundle</span>
+              <span id="export-spinner" class="spinner" style="display:none"></span>
+            </button>
+            <button class="btn-secondary" id="btn-download-bundle" style="display:none" onclick="downloadExportBundle()">
+              Download .vault File
+            </button>
+          </div>
+
+          <div id="sync-export-result-box" style="display:none; margin-top:1rem">
+            <label class="form-label">ARMORED CIPHERTEXT PAYLOAD</label>
+            <textarea id="sync-export-textarea" class="form-textarea" style="font-family:var(--font-receipt); font-size:0.75rem" readonly></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem">
+              <span id="sync-export-checksum" style="font-size: 0.75rem; color:var(--thermal-ink-3); font-family:var(--font-receipt)"></span>
+              <button class="btn-sm btn-secondary" onclick="copyExportPayload()">Copy to Clipboard</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-TAB 2: IMPORT -->
+        <div id="sync-panel-import" class="sync-panel" style="display:none">
+          <p style="font-size:0.84rem; color:var(--thermal-ink-2); margin-bottom:1rem">
+            Restore or merge memories from another device by decrypting an armored vault bundle.
+          </p>
+          <div class="form-group">
+            <label class="form-label">ARMORED ENCRYPTED BUNDLE (JSON)</label>
+            <textarea id="sync-import-payload" class="form-textarea" placeholder="Paste the encrypted JSON bundle here..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">DECRYPTION PASSPHRASE</label>
+            <input type="password" id="sync-import-pass" class="form-input" placeholder="Enter the exact passphrase used when exporting">
+          </div>
+          <div class="form-group">
+            <label class="form-label">MERGE STRATEGY</label>
+            <select id="sync-import-strategy" class="form-select">
+              <option value="skip_existing">Skip Existing (Preserve local receipts with matching IDs)</option>
+              <option value="overwrite">Overwrite & Update (Replace local receipts with imported data)</option>
+            </select>
+          </div>
+
+          <div style="margin-top:1rem">
+            <button class="btn-primary" onclick="performSyncImport()">
+              <span id="import-btn-label">Decrypt & Import Vault</span>
+              <span id="import-spinner" class="spinner" style="display:none"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-TAB 3: PROFILES -->
+        <div id="sync-panel-profile" class="sync-panel" style="display:none">
+          <p style="font-size:0.84rem; color:var(--thermal-ink-2); margin-bottom:1rem">
+            Manage local sovereign profiles for multi-user isolation on this machine.
+          </p>
+          <div class="profile-cards-list">
+            <div class="profile-card active">
+              <div class="profile-card-header">
+                <strong>Hari (Primary)</strong>
+                <span class="brand-badge">ACTIVE</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--thermal-ink-2); margin-top:0.25rem">Local Vault: ./data/vault.db</div>
+            </div>
+            <div class="profile-card" onclick="switchUserProfile('Work Laptop')">
+              <div class="profile-card-header">
+                <strong>Work Profile (Secured)</strong>
+                <span class="badge-sub">Switch &rarr;</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--thermal-ink-2); margin-top:0.25rem">Cross-device sync profile</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-sync')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ENGINE DIAGNOSTICS -->
+  <div id="modal-engine" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span><svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#zap"></use></svg> Token Factory Diagnostics</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-engine')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="engine-diag-grid">
+          <div class="diag-item">
+            <span class="diag-label">INFERENCE PROVIDER</span>
+            <span class="diag-val" id="diag-provider">Nebius Token Factory</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">API BASE URL</span>
+            <span class="diag-val" id="diag-base-url" style="font-family:var(--font-receipt); font-size:0.75rem">https://...</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">CHAT REASONING MODEL</span>
+            <span class="diag-val" id="diag-chat-model" style="font-family:var(--font-receipt); font-size:0.75rem">nvidia/nemotron-3-super-120b-a12b</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">FACT EXTRACTION MODEL</span>
+            <span class="diag-val" id="diag-extract-model" style="font-family:var(--font-receipt); font-size:0.75rem">nvidia/nemotron-3-nano-omni-30b-a3b-reasoning</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">API KEY STATUS</span>
+            <span class="diag-val" id="diag-key-status">Key Present</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">STRICT LIVE MODE</span>
+            <span class="diag-val" id="diag-strict-mode" style="color:var(--thermal-ledger-green)">TRUE (No simulated fallbacks)</span>
+          </div>
+          <div class="diag-item"><span class="diag-label">LAST RESPONSE MODEL</span><span class="diag-val" id="diag-last-model">No chat response yet</span></div>
+          <div class="diag-item"><span class="diag-label">LAST RESPONSE TOKENS</span><span class="diag-val" id="diag-last-tokens">—</span></div>
+          <div class="diag-item"><span class="diag-label">LAST RESPONSE LATENCY</span><span class="diag-val" id="diag-last-latency">—</span></div>
+        </div>
+
+        <p id="engine-connection-result" class="engine-connection-result" role="status" aria-live="polite"></p>
+        <div class="diag-note">
+          The vault is stored locally. When live inference runs, the selected query and matching receipt context are sent to Nebius Token Factory. Credentials are never shown here.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" type="button" onclick="runEngineConnectionTest()">Test connection</button>
+        <button class="btn-secondary" onclick="openSettingsModal()">Edit API Keys</button>
+        <button class="btn-primary" onclick="closeModal('modal-engine')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CORRECT MEMORY -->
+  <div id="modal-correct" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>Sovereign Fact Correction</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-correct')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">CURRENT FACT CONTENT</label>
+          <div id="correct-old-content" style="font-size:0.85rem; color:var(--thermal-ink-2); background:var(--thermal-receipt); padding:0.6rem; border-radius:var(--radius-control)"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">NEW CORRECTED FACT</label>
+          <textarea id="correct-new-content" class="form-textarea" placeholder="Enter corrected factual statement..." oninput="handleCorrectionConflictCheck()"></textarea>
+          <div id="correct-conflict-warn" class="inline-conflict-warn" style="display:none"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">AUDIT REASON (PROVENANCE NOTE)</label>
+          <input type="text" id="correct-reason" class="form-input" value="User sovereign correction via audit interface">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-correct')">Cancel</button>
+        <button class="btn-primary" onclick="submitCorrection()">
+          <span>Save Sovereign Correction</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD MEMORY -->
+  <div id="modal-add" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>+ Add Sovereign Memory Receipt</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-add')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group document-import-box">
+          <label class="form-label" for="add-document-file">START FROM A LOCAL TEXT FILE</label>
+          <input id="add-document-file" class="form-input" type="file" accept=".txt,.md,.eml,text/plain,text/markdown,message/rfc822" disabled aria-describedby="document-import-result">
+          <small id="document-import-result" class="document-import-result" aria-live="polite">Not available with the restored backend. Use the manual receipt fields below.</small>
+        </div>
+        <div class="form-group">
+          <label class="form-label">FACT STATEMENT</label>
+          <textarea id="add-content" class="form-textarea" placeholder="e.g. User prefers Python 3.12 for all new backend services." oninput="handleAddConflictCheck()"></textarea>
+          <!-- Dynamic conflict warning pill -->
+          <div id="add-conflict-pill" class="inline-conflict-warn" style="display:none">
+            <svg class="ui-icon" aria-hidden="true"><use href="/static/brand/icons.svg#alert"></use></svg> <span id="add-conflict-msg">Contradiction detected with an existing memory</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem">
+          <div class="form-group">
+            <label class="form-label">CATEGORY</label>
+            <select id="add-category" class="form-select">
+              <option value="preference">Lifestyle / Preference</option>
+              <option value="project">Active Project / Sprint</option>
+              <option value="factual_web">Web Research</option>
+              <option value="personal">Personal / Contact</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">DECAY CURVE</label>
+            <select id="add-decay" class="form-select">
+              <option value="lifestyle_preference">Slow Decay (90d half-life)</option>
+              <option value="active_project">Medium Decay (21d half-life)</option>
+              <option value="transient_state">Fast Decay (7d half-life)</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem">
+          <div class="form-group">
+            <label class="form-label">SOURCE TYPE</label>
+            <select id="add-source-type" class="form-select">
+              <option value="email">Email Thread</option>
+              <option value="slack">Slack / Team Chat</option>
+              <option value="document">Document / PDF</option>
+              <option value="chat">Direct Conversation</option>
+              <option value="tavily_search">Web Search</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">SOURCE TITLE</label>
+            <input type="text" id="add-source-title" class="form-input" placeholder="e.g. Email from CTO on Backend Stack">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">LITERAL SOURCE EXCERPT (PROVENANCE PROOF)</label>
+          <textarea id="add-source-excerpt" class="form-textarea" placeholder="Paste literal email quote or document excerpt..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">SOURCE URL (OPTIONAL)</label>
+          <input type="text" id="add-source-url" class="form-input" placeholder="https://...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-add')">Cancel</button>
+        <button class="btn-primary" onclick="submitNewMemory()">
+          <span>Save Receipt</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TAVILY INGEST -->
+  <div id="modal-tavily" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>Web Verification (Tavily)</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-tavily')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">SEARCH QUERY TO INGEST WITH PROVENANCE</label>
+          <input type="text" id="tavily-query-input" class="form-input" placeholder="e.g. Nebius Token Factory NVIDIA Nemotron specs">
+        </div>
+        <div class="form-group">
+          <label class="form-label">DECAY CURVE</label>
+          <select id="tavily-decay-select" class="form-select">
+            <option value="transient_state">Fast Decay (7d half-life) - Web Intel</option>
+            <option value="active_project">Medium Decay (21d half-life)</option>
+            <option value="lifestyle_preference">Slow Decay (90d half-life)</option>
+          </select>
+        </div>
+        <p style="font-size:0.75rem; color:var(--thermal-ink-3)">
+          Tavily will search the live web, extract the top result with full source URL, snippet, and confidence score, creating an auditable receipt with a <em>Verify Source</em> button.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-tavily')">Cancel</button>
+        <button class="btn-primary" onclick="submitTavilyIngest()">
+          <span id="tavily-btn-text">Search & Ingest</span>
+          <span id="tavily-spinner" class="spinner" style="display:none"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SETTINGS -->
+  <div id="modal-settings" class="modal-overlay modal-settings-overlay">
+    <div class="modal-content modal-settings-panel">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>Configuration & API Credentials</span>
+        </div>
+        <button class="modal-close-btn" type="button" aria-label="Close Settings" title="Close Settings" onclick="closeModal('modal-settings')">&times;</button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group settings-field-group">
+          <label class="form-label" for="setting-nebius-key">NEBIUS TOKEN FACTORY API KEY</label>
+            <div class="credential-input-row"><input type="password" id="setting-nebius-key" class="form-input" placeholder="Enter Nebius Token Factory API key" autocomplete="new-password" aria-label="Nebius API key"><button type="button" class="credential-visibility-toggle" aria-label="Show Nebius API key" aria-pressed="false" onclick="toggleCredentialVisibility('setting-nebius-key', this)">Show</button></div>
+          <span class="settings-helper">Inference is sent only to https://api.tokenfactory.nebius.com/v1. Saved credentials are never returned to the interface.</span>
+        </div>
+        <div class="form-group settings-field-group">
+          <label class="form-label" for="setting-nemotron-model">NEMOTRON MODEL</label>
+          <select id="setting-nemotron-model" class="form-select"><option value="">Keep current model</option></select>
+          <span id="model-list-status" class="form-help">Model IDs load from Token Factory when Settings opens.</span>
+          <button id="btn-test-tokenfactory" class="btn-secondary" type="button" onclick="testTokenFactoryConnection()">Test connection <span id="tokenfactory-spinner" class="spinner" hidden></span></button>
+        </div>
+        <div class="form-group settings-field-group">
+          <label class="form-label" for="setting-tavily-key">TAVILY WEB SEARCH API KEY</label>
+          <div class="credential-input-row"><input type="password" id="setting-tavily-key" class="form-input" placeholder="Enter Tavily API key" autocomplete="new-password"><button type="button" class="credential-visibility-toggle" aria-label="Show Tavily API key" aria-pressed="false" onclick="toggleCredentialVisibility('setting-tavily-key', this)">Show</button></div>
+        </div>
+        <div class="form-group">
+          <button class="btn-secondary" id="btn-demo-self-test" type="button" onclick="runDemoSelfTest()">Run demo self-test</button>
+          <pre id="demo-self-test-result" class="self-test-result" role="status" aria-live="polite"></pre>
+        </div>
+        <section class="settings-danger-zone" aria-labelledby="settings-danger-title">
+          <div><h3 id="settings-danger-title">Danger zone</h3><p>Restore the local vault to the bundled demo seed records. This replaces the current demo receipts.</p></div>
+          <button class="btn-danger" type="button" onclick="resetDemoData()">Reset Demo</button>
+        </section>
+        <p id="settings-status" class="settings-status" role="status" aria-live="polite"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-settings')">Cancel</button>
+        <button class="btn-primary" onclick="submitSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-outbound" class="modal-overlay">
+    <div class="modal-content modal-outbound-content">
+      <div class="modal-header">
+        <div class="modal-title"><span>Outbound data ledger</span></div>
+        <button class="modal-close-btn" onclick="closeModal('modal-outbound')" aria-label="Close outbound data ledger">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="ledger-disclosure">Exact request payloads sent to Nebius Token Factory are stored in the local SQLite vault. Authorization headers and provider responses are not included. This ledger contains the submitted query and selected receipt context.</p>
+        <div id="outbound-ledger-list" class="outbound-ledger-list" aria-live="polite">Loading outbound requests…</div>
+      </div>
+      <div class="modal-footer"><button class="btn-secondary" onclick="closeModal('modal-outbound')">Close</button></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+  <script src="/static/js/icons.js?v=toolbar-inline-1"></script>
+  <script src="/static/js/app.js?v=graph-pause-resume-v7"></script>
+</body>
+</html>

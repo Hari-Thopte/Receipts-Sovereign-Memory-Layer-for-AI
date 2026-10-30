@@ -1,0 +1,41 @@
+FAIL C1 landing and no v4 @ 1280: title=RECEIPTS — Ask your AI for the receipt
+PASS C2 CTA text, contrast and width @ 1280
+PASS C5 no adjacent duplicate paragraphs @ 1280
+FAIL C9 no malformed profile name @ 1280: C9 no malformed profile name @ 1280
+PASS C9 profile menu opens @ 1280
+PASS C10 console logo returns home @ 1280
+PASS C11 no UNVERIFIED @ 1280
+PASS C13 no visible placeholders @ 1280
+FAIL C1 landing and no v4 @ 1440: title=RECEIPTS — Ask your AI for the receipt
+PASS C2 CTA text, contrast and width @ 1440
+PASS C5 no adjacent duplicate paragraphs @ 1440
+FAIL C9 no malformed profile name @ 1440: C9 no malformed profile name @ 1440
+PASS C9 profile menu opens @ 1440
+PASS C10 console logo returns home @ 1440
+PASS C11 no UNVERIFIED @ 1440
+PASS C13 no visible placeholders @ 1440
+FAIL C1 landing and no v4 @ 1920: title=RECEIPTS — Ask your AI for the receipt
+PASS C2 CTA text, contrast and width @ 1920
+PASS C5 no adjacent duplicate paragraphs @ 1920
+FAIL C9 no malformed profile name @ 1920: C9 no malformed profile name @ 1920
+PASS C9 profile menu opens @ 1920
+PASS C10 console logo returns home @ 1920
+PASS C11 no UNVERIFIED @ 1920
+PASS C13 no visible placeholders @ 1920
+FAIL C1 landing and no v4 @ 390: title=RECEIPTS — Ask your AI for the receipt
+PASS C2 CTA text, contrast and width @ 390
+PASS C5 no adjacent duplicate paragraphs @ 390
+PASS C9 no malformed profile name @ 390
+PASS C9 profile menu opens @ 390
+PASS C10 console logo returns home @ 390
+PASS C11 no UNVERIFIED @ 390
+PASS C13 no visible placeholders @ 390
+
+AUDIT FAIL · 25/32 checks passed
+C1 landing and no v4 @ 1280: title=RECEIPTS — Ask your AI for the receipt
+C9 no malformed profile name @ 1280: C9 no malformed profile name @ 1280
+C1 landing and no v4 @ 1440: title=RECEIPTS — Ask your AI for the receipt
+C9 no malformed profile name @ 1440: C9 no malformed profile name @ 1440
+C1 landing and no v4 @ 1920: title=RECEIPTS — Ask your AI for the receipt
+C9 no malformed profile name @ 1920: C9 no malformed profile name @ 1920
+C1 landing and no v4 @ 390: title=RECEIPTS — Ask your AI for the receipt

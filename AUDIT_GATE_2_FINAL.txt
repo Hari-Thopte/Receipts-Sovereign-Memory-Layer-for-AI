@@ -1,0 +1,10 @@
+PASS C3 H1 avoids blue panel @ 1280
+FAIL C4 printer size and above fold @ 1280: {"width":518.28125,"firstViewport":true,"labelLines":null}
+FAIL C14 printed receipt inside viewport @ 1280: C14 printed receipt inside viewport @ 1280
+PASS C3 H1 avoids blue panel @ 1440
+PASS C3 H1 avoids blue panel @ 1920
+PASS C3 H1 avoids blue panel @ 390
+
+AUDIT FAIL · 4/6 checks passed
+C4 printer size and above fold @ 1280: {"width":518.28125,"firstViewport":true,"labelLines":null}
+C14 printed receipt inside viewport @ 1280: C14 printed receipt inside viewport @ 1280

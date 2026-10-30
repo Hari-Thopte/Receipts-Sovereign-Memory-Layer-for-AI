@@ -1,0 +1,7 @@
+PASS C7 scroll progress changes displayed day
+PASS C7 old receipt ink fades with confidence
+PASS C7 receipt B appears when conflict arrives
+PASS C7 stamps follow confidence thresholds
+PASS C7 day 30 reaffirms the newer receipt
+
+AUDIT PASS · 5/5 checks passed

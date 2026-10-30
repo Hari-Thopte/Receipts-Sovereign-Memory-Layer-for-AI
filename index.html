@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipts — Sovereign Memory Layer with Memory Receipts</title>
+  <meta name="description" content="A local-first personal assistant giving every remembered fact an auditable receipt with source provenance, confidence, and staleness decay. Powered by NVIDIA Nemotron on Nebius Token Factory.">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%236366f1%22/><text x=%2216%22 y=%2222%22 font-family=%22sans-serif%22 font-size=%2218%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>R</text></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      
+      <!-- Left: Clean Brand Logo -->
+      <a href="#" class="brand" onclick="switchView('chat')">
+        <div class="brand-icon">R</div>
+        <div class="brand-title">
+          RECEIPTS
+          <span class="brand-badge">Sovereign</span>
+        </div>
+      </a>
+
+      <!-- Center: Main Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button id="tab-btn-chat" class="nav-tab-btn active" onclick="switchView('chat')">
+          <span>Chat</span>
+        </button>
+        <button id="tab-btn-vault" class="nav-tab-btn" onclick="switchView('vault')">
+          <span>Vault</span>
+          <span id="nav-vault-badge" class="nav-badge">6</span>
+        </button>
+        <button id="tab-btn-graph" class="nav-tab-btn" onclick="switchView('graph')">
+          <span>Graph</span>
+        </button>
+        <button id="tab-btn-agent" class="nav-tab-btn" onclick="switchView('agent')">
+          <span>Copilot</span>
+          <span id="agent-alerts-badge" class="badge-alert" style="display:none">0</span>
+        </button>
+        <button id="tab-btn-tour" class="nav-tab-btn" onclick="switchView('tour')">
+          <span>Tour</span>
+        </button>
+      </nav>
+
+      <!-- Right: Sleek System & Profile Controls -->
+      <div class="header-actions">
+        <!-- Live Engine Status Pill -->
+        <button class="engine-pill" onclick="openEngineModal()" title="Inference Engine: Click to inspect live diagnostics">
+          <span class="dot dot-green" id="engine-status-dot"></span>
+          <span id="model-display-pill" class="engine-model-name">Nemotron 120B</span>
+          <span class="engine-live-tag" id="engine-live-tag">LIVE</span>
+        </button>
+
+        <!-- User Profile -->
+        <button class="header-action-pill" onclick="openSyncModal('profile')" title="Current Profile: Click to switch">
+          <span class="dot dot-blue"></span>
+          <span id="current-user-label">Hari</span>
+        </button>
+
+        <!-- Encrypted Sync -->
+        <button class="header-action-pill" onclick="openSyncModal('export')" title="Encrypted Cross-Device Sync (AES-256-GCM)">
+          <span>🔐 Sync</span>
+        </button>
+
+        <!-- Settings -->
+        <button class="header-icon-btn" onclick="openSettingsModal()" title="Settings & API Keys">
+          ⚙️
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- Proactive Staleness Alerts Banner (Clean Floating Notification) -->
+    <div id="staleness-alert-banner" class="staleness-floating-banner" style="display:none">
+      <div class="banner-inner">
+        <div class="banner-text-group">
+          <span class="banner-icon">⚠️</span>
+          <span id="staleness-banner-text"><strong>Memory Staleness Alert:</strong> 1 fact has decayed below 40% confidence.</span>
+        </div>
+        <div class="banner-actions">
+          <button class="btn-sm btn-primary" onclick="switchView('agent')">Review in Copilot</button>
+          <button class="btn-sm btn-dismiss" onclick="dismissStalenessBanner()" title="Dismiss">&times;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 1: CHAT ASSISTANT -->
+    <section id="view-chat" class="view-section active">
+      <div class="chat-layout">
+        
+        <!-- Chat Panel -->
+        <div class="chat-panel">
+          <div class="chat-header">
+            <div class="chat-header-title">
+              <span>Sovereign Assistant</span>
+              <span class="model-badge" id="chat-model-badge">Nebius / NVIDIA Nemotron</span>
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-muted); display:flex; align-items:center; gap:0.5rem">
+              <label style="display:flex; align-items:center; gap:0.3rem; cursor:pointer">
+                <input type="checkbox" id="check-include-stale"> Include Stale Memories
+              </label>
+            </div>
+          </div>
+
+          <div id="chat-messages" class="chat-messages">
+            <!-- Initial welcome message -->
+            <div class="chat-msg assistant">
+              <div class="msg-bubble">
+                Hello Hari. I am <strong>Receipts</strong>, your sovereign memory layer.
+                Every fact I know about you is stored locally in your SQLite vault with a cryptographic receipt — complete with literal source provenance, confidence score, and staleness decay.
+                <br><br>
+                Try asking about your sprint planning cadence, active engineering priorities, or coffee preferences to inspect the live receipts used in my reasoning.
+              </div>
+              <div class="msg-meta">
+                <span>Receipts Engine</span> • <span>Local First</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Input Bar -->
+          <div class="chat-input-bar">
+            <!-- Quick prompt chips -->
+            <div class="quick-prompts">
+              <span class="prompt-chip" onclick="applyQuickPrompt('How should we schedule the sprint planning meeting?')">Sprint Planning Cadence</span>
+              <span class="prompt-chip" onclick="applyQuickPrompt('What is my current engineering focus this sprint?')">Current Sprint Priority</span>
+              <span class="prompt-chip" onclick="applyQuickPrompt('What model powers your inference on Nebius?')">Nebius & Nemotron Stack</span>
+              <span class="prompt-chip" onclick="applyQuickPrompt('Can you order my usual coffee?')">Coffee Preference</span>
+              <span class="prompt-chip" onclick="applyQuickPrompt('What is my current travel phone number?')">Travel Phone (Stale Test)</span>
+            </div>
+
+            <form id="chat-form" class="input-row" onsubmit="handleChatSubmit(event)">
+              <input type="text" id="chat-input" class="chat-input" placeholder="Ask a question or query your personal vault..." autocomplete="off">
+              <button type="submit" id="btn-chat-send" class="btn-send">
+                <span>Send</span>
+                <span id="send-spinner" class="spinner" style="display:none"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Chat Side Inspector: Used Receipts Drawer -->
+        <aside class="chat-inspector-panel">
+          <div class="inspector-header">
+            <div class="inspector-header-title">
+              <span>Active Receipt Inspector</span>
+            </div>
+            <span id="inspector-count-badge" class="brand-badge">0 Receipts</span>
+          </div>
+
+          <div id="inspector-body" class="inspector-body">
+            <div class="empty-inspector">
+              <div style="font-size:1.1rem; color:var(--text-muted); font-weight:600">No Receipt Selected</div>
+              <div><strong>No receipts active</strong></div>
+              <div>Ask a question in chat or click a receipt citation pill to audit its source provenance and freshness score.</div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- VIEW 2: MEMORY VAULT -->
+    <section id="view-vault" class="view-section">
+      <div class="vault-header-row">
+        <div class="vault-title-group">
+          <h2>Sovereign Memory Vault</h2>
+          <div class="vault-subtitle">
+            All memories live exclusively in your local SQLite database (<code id="vault-db-path-label">./data/vault.db</code>). Nebius and NVIDIA Nemotron only see minimal context on-demand.
+          </div>
+        </div>
+
+        <div class="vault-toolbar">
+          <button class="btn-primary" onclick="openAddMemoryModal()">
+            <span>+ Add Memory Receipt</span>
+          </button>
+          <button class="btn-secondary" onclick="checkAllVaultConflicts()" title="Scan vault for contradictory memories">
+            <span>Scan Conflicts</span>
+          </button>
+          <button class="btn-secondary" onclick="openTavilyIngestModal()">
+            <span>Ingest Web (Tavily)</span>
+          </button>
+          <button class="btn-secondary" onclick="openSyncModal('export')">
+            <span>Encrypted Sync</span>
+          </button>
+          <button class="btn-secondary" onclick="resetDemoData()" title="Reset back to default demo state">
+            <span>Reset Demo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sleek Vault Stats Subbar -->
+      <div class="vault-stats-subbar">
+        <div class="vault-substat">
+          <span class="dot dot-blue"></span>
+          <span>Total Vault: <strong id="stat-total-count">0</strong> facts</span>
+        </div>
+        <div class="vault-substat">
+          <span class="dot dot-green"></span>
+          <span>Fresh: <strong id="stat-fresh-count" style="color:var(--accent-fresh)">0</strong></span>
+        </div>
+        <div class="vault-substat">
+          <span class="dot dot-amber"></span>
+          <span>Decaying: <strong id="stat-decay-count" style="color:var(--accent-decay)">0</strong></span>
+        </div>
+        <div class="vault-substat">
+          <span class="dot dot-red"></span>
+          <span>Stale: <strong id="stat-stale-count" style="color:var(--accent-stale)">0</strong></span>
+        </div>
+        <div class="vault-substat" style="margin-left:auto">
+          <span>Sovereign Health: <strong id="stat-health-pct" style="color:var(--accent-fresh)">100%</strong></span>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="vault-filters">
+        <div class="filter-group">
+          <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600">CATEGORY:</span>
+          <button class="filter-pill active" onclick="filterVault('all', currentStatus)">All</button>
+          <button class="filter-pill" onclick="filterVault('preference', currentStatus)">Preferences</button>
+          <button class="filter-pill" onclick="filterVault('project', currentStatus)">Projects</button>
+          <button class="filter-pill" onclick="filterVault('factual_web', currentStatus)">Web Research</button>
+          <button class="filter-pill" onclick="filterVault('personal', currentStatus)">Personal</button>
+        </div>
+
+        <div class="filter-group">
+          <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600">STATUS:</span>
+          <button class="filter-pill active" onclick="filterVault(currentCategory, 'all')">All</button>
+          <button class="filter-pill" onclick="filterVault(currentCategory, 'fresh')">Fresh</button>
+          <button class="filter-pill" onclick="filterVault(currentCategory, 'decaying')">Decaying</button>
+          <button class="filter-pill" onclick="filterVault(currentCategory, 'stale')">Stale</button>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="vault-search-input" placeholder="Search facts, sources, excerpts..." oninput="handleVaultSearch(event)">
+        </div>
+      </div>
+
+      <!-- Conflict Notice Box (if any detected) -->
+      <div id="vault-conflict-banner" class="conflict-alert-card" style="display:none">
+        <div class="conflict-banner-header">
+          <span>⚠️ Contradictory Memories Detected in Vault</span>
+          <button class="btn-sm btn-secondary" onclick="dismissConflictBanner()">Dismiss</button>
+        </div>
+        <div id="vault-conflict-list" class="conflict-items"></div>
+      </div>
+
+      <!-- Cards Grid -->
+      <div id="vault-grid" class="vault-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- VIEW 3: LONG-TERM MEMORY GRAPH -->
+    <section id="view-graph" class="view-section">
+      <div class="graph-layout">
+        <div class="graph-canvas-container">
+          <div class="graph-toolbar">
+            <div class="graph-legend">
+              <span class="legend-chip"><span class="legend-dot" style="background:#6366f1"></span> Preference</span>
+              <span class="legend-chip"><span class="legend-dot" style="background:#f59e0b"></span> Active Project</span>
+              <span class="legend-chip"><span class="legend-dot" style="background:#06b6d4"></span> Web Intel</span>
+              <span class="legend-chip"><span class="legend-dot" style="background:#10b981"></span> Personal</span>
+              <span class="legend-chip"><span class="legend-dot" style="background:#475569"></span> Stale Fact</span>
+            </div>
+            <div class="graph-controls">
+              <button class="btn-sm btn-secondary" onclick="reloadMemoryGraph()">↻ Refresh Graph</button>
+              <button class="btn-sm btn-secondary" onclick="zoomGraph(1.2)">+ Zoom In</button>
+              <button class="btn-sm btn-secondary" onclick="zoomGraph(0.8)">- Zoom Out</button>
+              <button class="btn-sm btn-secondary" onclick="resetGraphView()">Reset View</button>
+            </div>
+          </div>
+
+          <div id="graph-wrapper" class="graph-svg-wrapper">
+            <svg id="memory-graph-svg" class="memory-graph-svg" width="100%" height="600"></svg>
+            <div id="graph-empty-state" class="graph-empty" style="display:none">
+              Loading sovereign memory knowledge graph...
+            </div>
+          </div>
+        </div>
+
+        <!-- Graph Side Panel: Selected Memory Details -->
+        <aside class="graph-inspector-panel">
+          <div class="inspector-header">
+            <div class="inspector-header-title">
+              <span>Selected Node Details</span>
+            </div>
+          </div>
+          <div id="graph-node-details" class="inspector-body">
+            <div class="empty-inspector">
+              <div style="font-size:1.1rem; color:var(--text-muted); font-weight:600">Select a Node</div>
+              <div>Click any memory node in the knowledge graph to inspect its receipt, confidence level, and connected semantic edges.</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- VIEW 4: AGENTIC COPILOT & HEALTH TOOLS -->
+    <section id="view-agent" class="view-section">
+      <div class="agent-dashboard">
+        
+        <!-- Health Meter & Stats Row -->
+        <div class="agent-health-row">
+          <div class="health-card">
+            <div class="health-gauge-box">
+              <div class="health-circle-outer">
+                <div class="health-circle-inner">
+                  <span id="agent-health-value" class="health-big-pct">100%</span>
+                  <span class="health-sub">Health Score</span>
+                </div>
+              </div>
+            </div>
+            <div class="health-info">
+              <h3>Sovereign Vault Health</h3>
+              <p style="color:var(--text-muted); font-size:0.88rem; margin:0.4rem 0 1rem 0">
+                Calculated in real-time by weighting active fresh facts against decaying and stale memories.
+              </p>
+              <div class="health-breakdown">
+                <div class="breakdown-item">
+                  <span class="dot dot-green"></span>
+                  <span>Fresh: <strong id="agent-fresh-stat">0</strong></span>
+                </div>
+                <div class="breakdown-item">
+                  <span class="dot dot-amber"></span>
+                  <span>Decaying: <strong id="agent-decay-stat">0</strong></span>
+                </div>
+                <div class="breakdown-item">
+                  <span class="dot dot-red"></span>
+                  <span>Stale: <strong id="agent-stale-stat">0</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="agent-model-card">
+            <div style="font-size:0.75rem; color:var(--primary); font-weight:700; letter-spacing:0.05em">AGENTIC REASONING ENGINE</div>
+            <h4 style="margin:0.4rem 0" id="agent-engine-name">NVIDIA Nemotron 3 Super</h4>
+            <p style="font-size:0.84rem; color:var(--text-muted); line-height:1.4">
+              Nemotron continuously reviews your vault topology, proposing proactive freshness reaffirms, conflict reconciliations, and knowledge-gap inquiries.
+            </p>
+            <div style="margin-top:1rem">
+              <button class="btn-primary" onclick="fetchAgentSuggestions()" id="btn-refresh-agent-sug">
+                <span>Run Agentic Vault Analysis</span>
+                <span id="agent-spinner" class="spinner" style="display:none"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Proactive Staleness Alerts Section -->
+        <div class="agent-section-block">
+          <div class="section-title-row">
+            <h3>⚠️ Proactive Staleness Alerts</h3>
+            <span class="badge-sub">Auto-flagged by exponential decay curves</span>
+          </div>
+          <div id="agent-staleness-list" class="agent-alerts-grid">
+            <!-- Dynamic alerts -->
+          </div>
+        </div>
+
+        <!-- Agentic Maintenance Suggestions Section -->
+        <div class="agent-section-block">
+          <div class="section-title-row">
+            <h3>🤖 Nemotron Actionable Recommendations</h3>
+            <span class="badge-sub" id="agent-suggestions-meta">Powered by Nemotron reasoning</span>
+          </div>
+          <div id="agent-suggestions-list" class="agent-suggestions-grid">
+            <!-- Dynamic suggestions -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 5: SOVEREIGNTY DEMO TOUR -->
+    <section id="view-tour" class="view-section">
+      <div class="tour-container">
+        
+        <div style="text-align:center; margin-bottom:2rem">
+          <div class="brand-badge" style="font-size:0.8rem; margin-bottom:0.5rem">Judge Evaluation Walkthrough</div>
+          <h2 style="font-size:1.8rem; font-weight:700">The Sovereignty Proof in 6 Steps</h2>
+          <p style="color:var(--text-muted); max-width:620px; margin:0.5rem auto">
+            Experience why a <strong>Memory Vault with Receipts</strong> beats generic companion bots: transparent provenance, mathematical decay curves, conflict detection, audited corrections, encrypted sync, and instant deletion.
+          </p>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 1 • PROVENANCE REASONING</div>
+          <h3 class="tour-title">1. Query Assistant on Sprint Planning</h3>
+          <p class="tour-desc">
+            Ask how sprint meetings should be scheduled. NVIDIA Nemotron uses receipt <code>REC-ASYNC1</code> (sourced from an email thread) to state you strictly prefer async updates.
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Prompt:</strong> "How should we schedule the sprint planning meeting?"
+            </div>
+            <button class="btn-primary" onclick="runTourStep(1)">Run Step 1 &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 2 • AUDIT RECEIPT CARD</div>
+          <h3 class="tour-title">2. Inspect the Receipt Card</h3>
+          <p class="tour-desc">
+            Examine the physical-style receipt for <code>REC-ASYNC1</code>. Notice the literal email excerpt, 95% confidence score, and <strong>Lifestyle & Preference</strong> decay curve (90-day half-life).
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Receipt:</strong> <code>REC-ASYNC1</code> • Email Thread: Q4 Sprint Cadence
+            </div>
+            <button class="btn-secondary" onclick="runTourStep(2)">Inspect Receipt &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 3 • SOVEREIGN USER CORRECTION & CONFLICT CHECK</div>
+          <h3 class="tour-title">3. Live Correct the Memory</h3>
+          <p class="tour-desc">
+            Change your preference from async to: <em>"User now prefers live 15-minute morning syncs over async communication."</em> Watch the audit trail capture your edit with timestamps.
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Correction:</strong> Update preference & reset confidence clock.
+            </div>
+            <button class="btn-primary" onclick="runTourStep(3)">Perform Correction &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 4 • VERIFY SYSTEM REFLECTS CHANGE</div>
+          <h3 class="tour-title">4. Re-Query Assistant</h3>
+          <p class="tour-desc">
+            Ask the exact same question again. NVIDIA Nemotron immediately adapts to your corrected sovereign receipt, recommending live morning syncs!
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Re-test:</strong> Assistant answers with updated fact and cited receipt.
+            </div>
+            <button class="btn-primary" onclick="runTourStep(4)">Re-Query Assistant &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 5 • TAVILY SOURCE VERIFICATION ($3K BONUS)</div>
+          <h3 class="tour-title">5. Verify Web Source via Tavily</h3>
+          <p class="tour-desc">
+            Run a live verification on <code>REC-NEMO3</code>. Tavily checks the live URL to confirm the excerpt is intact and flags if content drift has occurred.
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Target:</strong> <code>REC-NEMO3</code> (Nebius Token Factory Model Directory)
+            </div>
+            <button class="btn-secondary" onclick="runTourStep(5)">Verify via Tavily &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="tour-card">
+          <div class="tour-step-badge">STEP 6 • ENCRYPTED CROSS-DEVICE SYNC</div>
+          <h3 class="tour-title">6. Export AES-256-GCM Encrypted Vault</h3>
+          <p class="tour-desc">
+            Demonstrate zero-trust sovereign portability. Export your entire local vault encrypted with a custom passphrase using AES-256-GCM and PBKDF2 (100,000 iterations).
+          </p>
+          <div class="tour-action-box">
+            <div>
+              <strong>Action:</strong> Open Encrypted Sync modal to export or import.
+            </div>
+            <button class="btn-primary" onclick="runTourStep(6)">Open Encrypted Sync &rarr;</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: CONFLICT DETECTION WARNING ("WOW" INTERACTION) -->
+  <div id="modal-conflict" class="modal-overlay">
+    <div class="modal-content modal-warning">
+      <div class="modal-header">
+        <div class="modal-title" style="color:var(--accent-decay)">
+          <span>⚠️ Memory Conflict Detected</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-conflict')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.9rem; color:var(--text-main); line-height:1.5">
+          The statement you are adding directly contradicts an active receipt already stored in your sovereign vault:
+        </p>
+
+        <div class="conflict-comparison">
+          <div class="conflict-col old">
+            <span class="col-tag">EXISTING ACTIVE RECEIPT (<span id="conflict-existing-id">#REC</span>)</span>
+            <div id="conflict-existing-content" class="conflict-text"></div>
+          </div>
+          <div class="conflict-col new">
+            <span class="col-tag">PROPOSED NEW FACT</span>
+            <div id="conflict-proposed-content" class="conflict-text"></div>
+          </div>
+        </div>
+
+        <div id="conflict-domain-hint" class="conflict-hint-box"></div>
+
+        <p style="font-size:0.8rem; color:var(--text-muted)">
+          How would you like Receipts to resolve this contradiction?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-conflict')">Cancel & Edit</button>
+        <button class="btn-secondary" onclick="resolveConflictKeepBoth()">Keep Both as Context</button>
+        <button class="btn-primary" onclick="resolveConflictOverwrite()">
+          <span>⚡ Overwrite & Supersede Existing</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ENCRYPTED CROSS-DEVICE SYNC -->
+  <div id="modal-sync" class="modal-overlay">
+    <div class="modal-content" style="max-width:640px">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🔐 Sovereign Encrypted Sync (AES-256-GCM)</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-sync')">&times;</button>
+      </div>
+
+      <!-- Sync Tabs -->
+      <div class="sync-tab-bar">
+        <button id="sync-tab-export" class="sync-tab-btn active" onclick="switchSyncTab('export')">Export Vault</button>
+        <button id="sync-tab-import" class="sync-tab-btn" onclick="switchSyncTab('import')">Import Vault</button>
+        <button id="sync-tab-profile" class="sync-tab-btn" onclick="switchSyncTab('profile')">User Profiles</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- SUB-TAB 1: EXPORT -->
+        <div id="sync-panel-export" class="sync-panel active">
+          <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:1rem">
+            Encrypt your local SQLite memory vault using <strong>AES-256-GCM</strong> with 100,000 PBKDF2 iterations. No cloud servers, no intermediaries.
+          </p>
+          <div class="form-group">
+            <label class="form-label">CURRENT PROFILE / USER ID</label>
+            <input type="text" id="sync-export-user" class="form-input" value="Hari (Primary)" readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ENCRYPTION PASSPHRASE</label>
+            <input type="password" id="sync-export-pass" class="form-input" placeholder="Enter a secure passphrase (min 4 chars)">
+          </div>
+          <div style="display:flex; gap:0.5rem; align-items:center; margin-top:0.25rem">
+            <input type="checkbox" id="sync-export-audit" checked>
+            <label for="sync-export-audit" style="font-size:0.8rem; color:var(--text-muted); cursor:pointer">Include full provenance audit histories</label>
+          </div>
+
+          <div style="margin-top:1rem; display:flex; gap:0.75rem">
+            <button class="btn-primary" onclick="performSyncExport()">
+              <span id="export-btn-label">Generate Encrypted Bundle</span>
+              <span id="export-spinner" class="spinner" style="display:none"></span>
+            </button>
+            <button class="btn-secondary" id="btn-download-bundle" style="display:none" onclick="downloadExportBundle()">
+              Download .vault File
+            </button>
+          </div>
+
+          <div id="sync-export-result-box" style="display:none; margin-top:1rem">
+            <label class="form-label">ARMORED CIPHERTEXT PAYLOAD</label>
+            <textarea id="sync-export-textarea" class="form-textarea" style="font-family:var(--font-mono); font-size:0.75rem" readonly></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem">
+              <span id="sync-export-checksum" style="font-size:0.72rem; color:var(--text-dim); font-family:var(--font-mono)"></span>
+              <button class="btn-sm btn-secondary" onclick="copyExportPayload()">Copy to Clipboard</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-TAB 2: IMPORT -->
+        <div id="sync-panel-import" class="sync-panel" style="display:none">
+          <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:1rem">
+            Restore or merge memories from another device by decrypting an armored vault bundle.
+          </p>
+          <div class="form-group">
+            <label class="form-label">ARMORED ENCRYPTED BUNDLE (JSON)</label>
+            <textarea id="sync-import-payload" class="form-textarea" placeholder="Paste the encrypted JSON bundle here..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">DECRYPTION PASSPHRASE</label>
+            <input type="password" id="sync-import-pass" class="form-input" placeholder="Enter the exact passphrase used when exporting">
+          </div>
+          <div class="form-group">
+            <label class="form-label">MERGE STRATEGY</label>
+            <select id="sync-import-strategy" class="form-select">
+              <option value="skip_existing">Skip Existing (Preserve local receipts with matching IDs)</option>
+              <option value="overwrite">Overwrite & Update (Replace local receipts with imported data)</option>
+            </select>
+          </div>
+
+          <div style="margin-top:1rem">
+            <button class="btn-primary" onclick="performSyncImport()">
+              <span id="import-btn-label">Decrypt & Import Vault</span>
+              <span id="import-spinner" class="spinner" style="display:none"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-TAB 3: PROFILES -->
+        <div id="sync-panel-profile" class="sync-panel" style="display:none">
+          <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:1rem">
+            Manage local sovereign profiles for multi-user isolation on this machine.
+          </p>
+          <div class="profile-cards-list">
+            <div class="profile-card active">
+              <div class="profile-card-header">
+                <strong>Hari (Primary)</strong>
+                <span class="brand-badge">ACTIVE</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem">Local Vault: ./data/vault.db</div>
+            </div>
+            <div class="profile-card" onclick="switchUserProfile('Work Laptop')">
+              <div class="profile-card-header">
+                <strong>Work Profile (Secured)</strong>
+                <span class="badge-sub">Switch &rarr;</span>
+              </div>
+              <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem">Cross-device sync profile</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-sync')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ENGINE DIAGNOSTICS -->
+  <div id="modal-engine" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>⚡ Live Nemotron Engine Diagnostics</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-engine')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="engine-diag-grid">
+          <div class="diag-item">
+            <span class="diag-label">INFERENCE PROVIDER</span>
+            <span class="diag-val" id="diag-provider">NVIDIA NIM / Nebius</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">API BASE URL</span>
+            <span class="diag-val" id="diag-base-url" style="font-family:var(--font-mono); font-size:0.75rem">https://...</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">CHAT REASONING MODEL</span>
+            <span class="diag-val" id="diag-chat-model" style="font-family:var(--font-mono); font-size:0.75rem">nvidia/nemotron-3-super-120b-a12b</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">FACT EXTRACTION MODEL</span>
+            <span class="diag-val" id="diag-extract-model" style="font-family:var(--font-mono); font-size:0.75rem">nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">API KEY STATUS</span>
+            <span class="diag-val" id="diag-key-status">Key Present</span>
+          </div>
+          <div class="diag-item">
+            <span class="diag-label">STRICT LIVE MODE</span>
+            <span class="diag-val" id="diag-strict-mode" style="color:var(--accent-fresh)">TRUE (No simulated fallbacks)</span>
+          </div>
+        </div>
+
+        <div class="diag-note">
+          <strong>Democratizing Sovereign Memory:</strong> Queries never leave your control without auditable receipts. All embeddings and facts remain in your local SQLite store.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="openSettingsModal()">Edit API Keys</button>
+        <button class="btn-primary" onclick="closeModal('modal-engine')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CORRECT MEMORY -->
+  <div id="modal-correct" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>Sovereign Fact Correction</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-correct')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">CURRENT FACT CONTENT</label>
+          <div id="correct-old-content" style="font-size:0.85rem; color:var(--text-muted); background:var(--bg-card); padding:0.6rem; border-radius:4px"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">NEW CORRECTED FACT</label>
+          <textarea id="correct-new-content" class="form-textarea" placeholder="Enter corrected factual statement..." oninput="handleCorrectionConflictCheck()"></textarea>
+          <div id="correct-conflict-warn" class="inline-conflict-warn" style="display:none"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">AUDIT REASON (PROVENANCE NOTE)</label>
+          <input type="text" id="correct-reason" class="form-input" value="User sovereign correction via audit interface">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-correct')">Cancel</button>
+        <button class="btn-primary" onclick="submitCorrection()">
+          <span>Save Sovereign Correction</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD MEMORY -->
+  <div id="modal-add" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>+ Add Sovereign Memory Receipt</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-add')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">FACT STATEMENT</label>
+          <textarea id="add-content" class="form-textarea" placeholder="e.g. User prefers Python 3.12 for all new backend services." oninput="handleAddConflictCheck()"></textarea>
+          <!-- Dynamic conflict warning pill -->
+          <div id="add-conflict-pill" class="inline-conflict-warn" style="display:none">
+            ⚠️ <span id="add-conflict-msg">Contradiction detected with an existing memory</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem">
+          <div class="form-group">
+            <label class="form-label">CATEGORY</label>
+            <select id="add-category" class="form-select">
+              <option value="preference">Lifestyle / Preference</option>
+              <option value="project">Active Project / Sprint</option>
+              <option value="factual_web">Web Research</option>
+              <option value="personal">Personal / Contact</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">DECAY CURVE</label>
+            <select id="add-decay" class="form-select">
+              <option value="lifestyle_preference">Slow Decay (90d half-life)</option>
+              <option value="active_project">Medium Decay (21d half-life)</option>
+              <option value="transient_state">Fast Decay (7d half-life)</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem">
+          <div class="form-group">
+            <label class="form-label">SOURCE TYPE</label>
+            <select id="add-source-type" class="form-select">
+              <option value="email">Email Thread</option>
+              <option value="slack">Slack / Team Chat</option>
+              <option value="document">Document / PDF</option>
+              <option value="chat">Direct Conversation</option>
+              <option value="tavily_search">Web Search</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">SOURCE TITLE</label>
+            <input type="text" id="add-source-title" class="form-input" placeholder="e.g. Email from CTO on Backend Stack">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">LITERAL SOURCE EXCERPT (PROVENANCE PROOF)</label>
+          <textarea id="add-source-excerpt" class="form-textarea" placeholder="Paste literal email quote or document excerpt..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">SOURCE URL (OPTIONAL)</label>
+          <input type="text" id="add-source-url" class="form-input" placeholder="https://...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-add')">Cancel</button>
+        <button class="btn-primary" onclick="submitNewMemory()">
+          <span>Save Receipt</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TAVILY INGEST -->
+  <div id="modal-tavily" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>Tavily Web Search Ingestion ($3k Bonus)</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-tavily')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">SEARCH QUERY TO INGEST WITH PROVENANCE</label>
+          <input type="text" id="tavily-query-input" class="form-input" placeholder="e.g. Nebius Token Factory NVIDIA Nemotron specs">
+        </div>
+        <div class="form-group">
+          <label class="form-label">DECAY CURVE</label>
+          <select id="tavily-decay-select" class="form-select">
+            <option value="transient_state">Fast Decay (7d half-life) - Web Intel</option>
+            <option value="active_project">Medium Decay (21d half-life)</option>
+            <option value="lifestyle_preference">Slow Decay (90d half-life)</option>
+          </select>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-dim)">
+          Tavily will search the live web, extract the top result with full source URL, snippet, and confidence score, creating an auditable receipt with a <em>Verify Source</em> button.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-tavily')">Cancel</button>
+        <button class="btn-primary" onclick="submitTavilyIngest()">
+          <span id="tavily-btn-text">Search & Ingest</span>
+          <span id="tavily-spinner" class="spinner" style="display:none"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SETTINGS -->
+  <div id="modal-settings" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>Configuration & API Credentials</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modal-settings')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">API KEY (NVIDIA NIM OR NEBIUS TOKEN FACTORY)</label>
+          <input type="password" id="setting-nebius-key" class="form-input" placeholder="nvapi-... or Nebius API Key">
+          <span style="font-size:0.7rem; color:var(--text-dim)">
+            Auto-detects nvapi-... prefix and routes directly to https://integrate.api.nvidia.com/v1
+          </span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">NVIDIA NEMOTRON MODEL</label>
+          <select id="setting-nemotron-model" class="form-select">
+            <option value="nvidia/nemotron-3-super-120b-a12b">nvidia/nemotron-3-super-120b-a12b (Reasoning & Synthesis)</option>
+            <option value="nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B">nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B (Extraction & Classification)</option>
+            <option value="nvidia/nemotron-mini-4b-instruct">nvidia/nemotron-mini-4b-instruct (Compact Edge)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">TAVILY WEB SEARCH API KEY</label>
+          <input type="password" id="setting-tavily-key" class="form-input" placeholder="Enter Tavily API Key for live web intelligence">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('modal-settings')">Cancel</button>
+        <button class="btn-primary" onclick="submitSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

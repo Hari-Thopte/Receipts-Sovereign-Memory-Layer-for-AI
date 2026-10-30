@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  receipts:
+    build: .
+    container_name: receipts-vault
+    ports:
+      - "8000:8000"
+    environment:
+      - NEBIUS_API_KEY=${NEBIUS_API_KEY:-}
+      - NEBIUS_BASE_URL=${NEBIUS_BASE_URL:-https://api.tokenfactory.nebius.com/v1/}
+      - NEMOTRON_CHAT_MODEL=${NEMOTRON_CHAT_MODEL:-nvidia/nemotron-3-super-120b-a12b}
+      - NEMOTRON_EXTRACT_MODEL=${NEMOTRON_EXTRACT_MODEL:-nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B}
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
+      - VAULT_DB_PATH=/app/data/vault.db
+      - HOST=0.0.0.0
+      - PORT=8000
+    volumes:
+      # Keep local SQLite database strictly on the host machine
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/stats"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

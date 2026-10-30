@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 40" role="img" aria-labelledby="title">
+  <title id="title">Receipts</title>
+  <path d="M3 2h26v29l-4 4-4-4-4 4-4-4-4 4-4-4-6 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M10 26V13h6.5a4 4 0 0 1 0 8H10m6 0 5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
+  <path d="M10 7h12" stroke="currentColor" stroke-width="1"/>
+</svg>

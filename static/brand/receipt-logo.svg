@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Receipts logo">
+  <defs>
+    <mask id="receipt-cutout"><rect width="64" height="64" fill="#fff"/><path d="M21 18h14c8 0 12 4 12 10 0 4-2 7-6 9l8 11H38l-7-10h-1v10H21zm9 8v5h5c3 0 3-5 0-5z" fill="#000"/></mask>
+  </defs>
+  <path d="M10 5h44v44l-7 6-7-6-8 6-7-6-7 6-8-6z" fill="#76B900" mask="url(#receipt-cutout)"/>
+  <path d="M18 14h9m-9 5h7" stroke="#183000" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

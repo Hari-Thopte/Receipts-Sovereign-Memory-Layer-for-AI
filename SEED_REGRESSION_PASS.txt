@@ -1,0 +1,22 @@
+.                                                                        [100%]
+============================== warnings summary ===============================
+app\main.py:48
+  C:\Users\Ishan\OneDrive\Documents\ChatGPT\PROJECT\previews\receipts-sovereign-memory\extracted\receipts-sovereign-memory\app\main.py:48: DeprecationWarning:
+          on_event is deprecated, use lifespan event handlers instead.
+
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+
+    @app.on_event("startup")
+
+..\..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4681
+  C:\Users\Ishan\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\applications.py:4681: DeprecationWarning:
+          on_event is deprecated, use lifespan event handlers instead.
+
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+
+    return self.router.on_event(event_type)  # ty: ignore[deprecated]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+1 passed, 5 deselected, 2 warnings in 1.63s

@@ -1,0 +1,25 @@
+:root {
+  color-scheme: dark;
+  --black: #030407; --mask-black: #000; --black-2: #0A0C12; --black-3: #12151D;
+  --line: rgba(255,255,255,.14); --line-strong: rgba(255,255,255,.28);
+  --cobalt: #1558C9; --cobalt-deep: #0B2F6E; --cobalt-soft: #8FB3F5;
+  --lime: #D4FF24; --text: #F4F6FA; --text-2: #B6BCC8; --text-3: #8A92A2;
+  --paper: #ECEEE6; --ink: #0A0B0F; --danger: #FF5A4D;
+  --paper-rule: rgba(10,11,15,.22); --black-overlay: rgba(3,4,7,.88);
+  --severity-high: #FF5A4D; --severity-medium: #FFB020; --severity-low: #3DDC97;
+  --category-preference: #1558C9; --category-project: #D4FF24; --category-web: #8FB3F5; --category-personal: #3DDC97;
+  --graph-edge: #8FB3F5; --graph-edge-inferred: #B6BCC8; --graph-stale: #FFB020;
+  --focus-ring: #D4FF24;
+  --shadow-paper: 0 14px 22px rgba(0,0,0,.18); --shadow-object: 0 16px 22px rgba(0,0,0,.18); --shadow-depth: 0 14px 22px rgba(0,0,0,.18);
+  --thermal-paper: var(--black); --thermal-paper-2: var(--black-2); --thermal-paper-3: var(--black-3);
+  --thermal-receipt: var(--paper); --thermal-ink: var(--text); --thermal-ink-2: var(--text-2); --thermal-ink-3: var(--text-3);
+  --thermal-rule: var(--line); --thermal-stamp-red: var(--danger); --thermal-carbon-blue: var(--cobalt-soft);
+  --thermal-ledger-green: var(--lime); --thermal-highlighter: var(--lime); --thermal-paper-shadow: var(--shadow-depth);
+  --radius-paper: 0px; --radius-control: 2px;
+  --font-display: "Bricolage Grotesque", "Instrument Sans", Arial, sans-serif;
+  --font-ui: "Instrument Sans", system-ui, sans-serif; --font-receipt: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@font-face { font-family: "Instrument Sans"; src: url("../fonts/instrument-sans-latin.woff2") format("woff2"); font-style: normal; font-weight: 400 600; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../fonts/ibm-plex-mono-400-latin.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../fonts/ibm-plex-mono-500-latin.woff2") format("woff2"); font-style: normal; font-weight: 500; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("../fonts/bricolage-grotesque-latin.woff2") format("woff2"); font-style: normal; font-weight: 200 800; font-stretch: 75% 100%; font-display: swap; }

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: receipts-sovereign-memory
+    runtime: docker
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: HOST
+        value: 0.0.0.0
+      - key: STRICT_LIVE_MODE
+        value: "True"
+      - key: NEMOTRON_CHAT_MODEL
+        value: nvidia/nemotron-3.5-bolt-e4b
+      - key: NEMOTRON_EXTRACT_MODEL
+        value: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+      - key: NEBIUS_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+

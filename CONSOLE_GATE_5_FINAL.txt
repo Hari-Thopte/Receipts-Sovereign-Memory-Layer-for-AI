@@ -1,0 +1,57 @@
+PASS 1440 tab Chat active
+PASS 1440 tab Vault active
+PASS 1440 tab Graph active
+PASS 1440 tab Copilot active
+PASS 1440 Copilot deduplicates local recommendations
+PASS 1440 tab Tour active
+PASS 1440 Copilot labels Nemotron source
+PASS 1440 modal modal-engine exclusive and fits: {"active":1,"box":{"x":380,"y":177.6875,"width":680,"height":544.625}}
+PASS 1440 modal modal-engine closes with Escape
+PASS 1440 modal modal-sync exclusive and fits: {"active":1,"box":{"x":400,"y":239.6875,"width":640,"height":420.609375}}
+PASS 1440 modal modal-sync closes with Escape
+PASS 1440 modal modal-settings exclusive and fits: {"active":1,"box":{"x":340,"y":54,"width":760,"height":792}}
+PASS 1440 Reset Demo requires confirmation
+PASS 1440 modal modal-settings closes with Escape
+PASS 1440 modal modal-add exclusive and fits: {"active":1,"box":{"x":380,"y":188.765625,"width":680,"height":522.46875}}
+PASS 1440 modal modal-add closes with Escape
+PASS 1440 modal modal-tavily exclusive and fits: {"active":1,"box":{"x":380,"y":293.390625,"width":680,"height":313.21875}}
+PASS 1440 modal modal-tavily closes with Escape
+PASS 1440 modal modal-outbound exclusive and fits: {"active":1,"box":{"x":380,"y":45,"width":680,"height":810}}
+PASS 1440 modal modal-outbound closes with Escape
+PASS 1440 modal modal-correct exclusive and fits: {"active":1,"box":{"x":380,"y":284.015625,"width":680,"height":331.96875}}
+PASS 1440 modal modal-correct closes with Escape
+PASS 1440 modal modal-conflict exclusive and fits: {"active":1,"box":{"x":380,"y":240.5,"width":680,"height":418.984375}}
+PASS 1440 modal modal-conflict closes with Escape
+PASS 1440 no console horizontal overflow
+PASS 1440 no console errors
+PASS 1440 no page errors
+PASS 1440 no failed HTTP responses
+PASS 390 tab Chat active
+PASS 390 tab Vault active
+PASS 390 tab Graph active
+PASS 390 tab Copilot active
+PASS 390 Copilot deduplicates local recommendations
+PASS 390 tab Tour active
+PASS 390 Copilot labels Nemotron source
+PASS 390 modal modal-engine exclusive and fits: {"active":1,"box":{"x":10,"y":28.8125,"width":370,"height":786.375}}
+PASS 390 modal modal-engine closes with Escape
+PASS 390 modal modal-sync exclusive and fits: {"active":1,"box":{"x":10,"y":159.4375,"width":370,"height":525.125}}
+PASS 390 modal modal-sync closes with Escape
+PASS 390 modal modal-settings exclusive and fits: {"active":1,"box":{"x":8,"y":42.640625,"width":374,"height":793.359375}}
+PASS 390 Reset Demo requires confirmation
+PASS 390 modal modal-settings closes with Escape
+PASS 390 modal modal-add exclusive and fits: {"active":1,"box":{"x":10,"y":79.40625,"width":370,"height":685.1875}}
+PASS 390 modal modal-add closes with Escape
+PASS 390 modal modal-tavily exclusive and fits: {"active":1,"box":{"x":10,"y":229.75,"width":370,"height":384.5}}
+PASS 390 modal modal-tavily closes with Escape
+PASS 390 modal modal-outbound exclusive and fits: {"active":1,"box":{"x":10,"y":228.296875,"width":370,"height":387.40625}}
+PASS 390 modal modal-outbound closes with Escape
+PASS 390 modal modal-correct exclusive and fits: {"active":1,"box":{"x":10,"y":219.140625,"width":370,"height":405.71875}}
+PASS 390 modal modal-correct closes with Escape
+PASS 390 modal modal-conflict exclusive and fits: {"active":1,"box":{"x":10,"y":143.53125,"width":370,"height":556.921875}}
+PASS 390 modal modal-conflict closes with Escape
+PASS 390 no console horizontal overflow
+PASS 390 no console errors
+PASS 390 no page errors
+PASS 390 no failed HTTP responses
+CONSOLE AUDIT PASS · 56/56 checks passed

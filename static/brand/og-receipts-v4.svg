@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Receipts v4 — Midnight, Cobalt, Lime">
+  <rect width="1200" height="630" fill="#030407"/>
+  <path d="M895 0h305v580l-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24-18-24-18 24V0z" fill="#1558C9"/>
+  <text x="86" y="104" fill="#8FB3F5" font-family="monospace" font-size="20" letter-spacing="4">LOCAL MEMORY · AUDITABLE RECEIPTS</text>
+  <text x="78" y="290" fill="#F4F6FA" font-family="Arial,sans-serif" font-size="98" font-weight="300">Your AI</text>
+  <text x="78" y="390" fill="#D4FF24" font-family="Arial,sans-serif" font-size="98" font-weight="800" font-style="italic">remembers.</text>
+  <text x="84" y="465" fill="#F4F6FA" font-family="Arial,sans-serif" font-size="42" font-weight="300">Receipts proves it.</text>
+  <path d="M950 90h160v2h-160m0 36h160m-160 36h160m-160 36h160m-160 36h160" stroke="#0A0B0F" stroke-width="2"/>
+  <text x="930" y="356" fill="#0A0B0F" font-family="monospace" font-size="18">SOURCE · TIME · CONFIDENCE</text>
+  <text x="930" y="398" fill="#0A0B0F" font-family="monospace" font-size="18">EVERY RECEIPT GETS OLD</text>
+</svg>

@@ -1,0 +1,74 @@
+PASS C1 landing and no v4 @ 1280
+PASS C2 CTA text, contrast and width @ 1280
+PASS C3 H1 avoids blue panel @ 1280
+PASS C4 printer size and above fold @ 1280
+PASS C5 no adjacent duplicate paragraphs @ 1280
+PASS C6 six visible item descriptions @ 1280
+PASS C9 no malformed profile name @ 1280
+PASS C9 profile menu opens @ 1280
+PASS C9 profile menu actions @ 1280
+PASS C9 Escape closes menu @ 1280
+PASS C9 outside click closes menu @ 1280
+PASS C10 console logo returns home @ 1280
+PASS C11 no UNVERIFIED @ 1280
+FAIL C12 AA contrast and no horizontal overflow @ 1280: {"overflow":false,"failures":[{"text":"§ 03","ratio":3.04,"fg":"rgb(143, 179, 245)","bg":"rgb(21, 88, 201)"}],"failureCount":1}
+PASS C15 scroll spy highlights Itemized
+PASS C16 itemized tape reaches six items
+PASS C17 configured spec IDs are copyable
+PASS C13 no visible placeholders @ 1280
+PASS C14 printed receipt inside viewport @ 1280
+PASS No browser errors @ 1280
+PASS C1 landing and no v4 @ 1440
+PASS C2 CTA text, contrast and width @ 1440
+PASS C3 H1 avoids blue panel @ 1440
+PASS C5 no adjacent duplicate paragraphs @ 1440
+PASS C9 no malformed profile name @ 1440
+PASS C9 profile menu opens @ 1440
+PASS C9 profile menu actions @ 1440
+PASS C9 Escape closes menu @ 1440
+PASS C9 outside click closes menu @ 1440
+PASS C10 console logo returns home @ 1440
+PASS C11 no UNVERIFIED @ 1440
+FAIL C12 AA contrast and no horizontal overflow @ 1440: {"overflow":false,"failures":[{"text":"§ 03","ratio":3.04,"fg":"rgb(143, 179, 245)","bg":"rgb(21, 88, 201)"}],"failureCount":1}
+PASS C13 no visible placeholders @ 1440
+PASS No browser errors @ 1440
+PASS C1 landing and no v4 @ 1920
+PASS C2 CTA text, contrast and width @ 1920
+PASS C3 H1 avoids blue panel @ 1920
+PASS C5 no adjacent duplicate paragraphs @ 1920
+PASS C9 no malformed profile name @ 1920
+PASS C9 profile menu opens @ 1920
+PASS C9 profile menu actions @ 1920
+PASS C9 Escape closes menu @ 1920
+PASS C9 outside click closes menu @ 1920
+PASS C10 console logo returns home @ 1920
+PASS C11 no UNVERIFIED @ 1920
+FAIL C12 AA contrast and no horizontal overflow @ 1920: {"overflow":false,"failures":[{"text":"§ 03","ratio":3.04,"fg":"rgb(143, 179, 245)","bg":"rgb(21, 88, 201)"}],"failureCount":1}
+PASS C13 no visible placeholders @ 1920
+PASS No browser errors @ 1920
+PASS C1 landing and no v4 @ 390
+PASS C2 CTA text, contrast and width @ 390
+PASS C3 H1 avoids blue panel @ 390
+PASS C5 no adjacent duplicate paragraphs @ 390
+PASS C9 no malformed profile name @ 390
+PASS C9 profile menu opens @ 390
+PASS C9 profile menu actions @ 390
+PASS C9 Escape closes menu @ 390
+PASS C9 outside click closes menu @ 390
+PASS C10 console logo returns home @ 390
+PASS C11 no UNVERIFIED @ 390
+FAIL C12 AA contrast and no horizontal overflow @ 390: {"overflow":false,"failures":[{"text":"§ 03","ratio":3.04,"fg":"rgb(143, 179, 245)","bg":"rgb(21, 88, 201)"}],"failureCount":1}
+PASS C13 no visible placeholders @ 390
+PASS No browser errors @ 390
+PASS C8 no cursor-following or dotted radial background
+PASS C7 scroll progress changes displayed day
+PASS C7 old receipt ink fades with confidence
+PASS C7 receipt B appears when conflict arrives
+PASS C7 stamps follow confidence thresholds
+PASS C7 day 30 reaffirms the newer receipt
+
+AUDIT FAIL · 64/68 checks passed
+C12 AA contrast and no horizontal overflow @ 1280: {"overflow":false,"failures":[{"text":"§ 03","ratio":3.04,"fg":"rgb(143, 179, 245)","bg":"rgb(21, 88, 201)"}],"failureCount":1}
+C12 AA contrast and no horizontal overflow @ 1440: {"overflow":false,"failures":[{"text":"§ 03","ratio":3.04,"fg":"rgb(143, 179, 245)","bg":"rgb(21, 88, 201)"}],"failureCount":1}
+C12 AA contrast and no horizontal overflow @ 1920: {"overflow":false,"failures":[{"text":"§ 03","ratio":3.04,"fg":"rgb(143, 179, 245)","bg":"rgb(21, 88, 201)"}],"failureCount":1}
+C12 AA contrast and no horizontal overflow @ 390: {"overflow":false,"failures":[{"text":"§ 03","ratio":3.04,"fg":"rgb(143, 179, 245)","bg":"rgb(21, 88, 201)"}],"failureCount":1}

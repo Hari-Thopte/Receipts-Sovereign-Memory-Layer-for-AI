@@ -1,0 +1,29 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#vault-actions-menu [role="menuitem"]').filter({ hasText: 'Ingest Web' })
+    - locator resolved to <button type="button" role="menuitem" onclick="closeVaultActions(); openTavilyIngestModal()">Ingest Web</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is not visible
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is not visible
+     - retrying click action
+       - waiting 500ms
+
+    at C:\Users\Ishan\OneDrive\Documents\ChatGPT\PROJECT\previews\receipts-sovereign-memory\extracted\receipts-sovereign-memory\tests\e2e\landing-audit\console-audit.mjs:75:198
+    at async modalOpen (C:\Users\Ishan\OneDrive\Documents\ChatGPT\PROJECT\previews\receipts-sovereign-memory\extracted\receipts-sovereign-memory\tests\e2e\landing-audit\console-audit.mjs:52:7)
+    at async file:///C:/Users/Ishan/OneDrive/Documents/ChatGPT/PROJECT/previews/receipts-sovereign-memory/extracted/receipts-sovereign-memory/tests/e2e/landing-audit/console-audit.mjs:75:5 {
+  name: 'TimeoutError'
+}
+
+Node.js v24.18.0
